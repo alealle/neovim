@@ -315,7 +315,7 @@ hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
 hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
 hi User3 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 hi User4 ctermfg=black ctermbg=green guibg=#ff8700 guifg=#444444
-hi User5 ctermfg=black ctermbg=green guibg=#d78700 guifg=#444444
+hi User5 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -333,7 +333,7 @@ if has("mac") || has("macunix")
   nmap <D-k> <M-k>
   vmap <D-j> <M-j>
   vmap <D-k> <M-k>
-endif
+endif         
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
@@ -345,7 +345,8 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee, *.vim, *.c, *.cpp,
+                \*.cs, *.dat, *.h :call CleanExtraSpaces()
 endif
 
 
