@@ -158,6 +158,7 @@ let &t_EI="\e[2 q"
 ":autocmd InsertEnter * :colorscheme default 
 ":autocmd InsertLeave * :colorscheme gruvbox
 ":autocmd InsertLeave * :set background=dark
+
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
 
@@ -174,6 +175,7 @@ set nowb
 set noswapfile
 set undodir=~/.vim/undo-dir
 set undofile
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -198,6 +200,7 @@ set nowrap "nowrap lines
 
 " Let scroll off when close to end of lines to keep view more centered
 set scrolloff=8
+
 
 """""""""""""""""""""""""""""""
 " => Visual mode related
@@ -300,10 +303,14 @@ set statusline=
 set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
 set statusline+=%5*%{StatuslineGit()}
 set statusline+=%4*\%{HasPaste()}
-set statusline+=%1*\ %<%F%m%r%h%w\                       " File path, modified, readonly, helpfile, preview
-set statusline+=%2*\ %y
+set statusline+=%7*\ %<%F%m%r%h%w\                       " File path, modified, readonly, helpfile, preview
+set statusline+=%8*\ %y
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\[%{&fileformat}\]
+" /Users/alessandroalle/
+let g:nome=getcwd()
+let g:patMyCurrDirAb =substitute(g:nome, "/Users/\\w\\{1,}", "~","")
+set statusline+=%6*\ CWD:\ %<%{g:patMyCurrDirAb}
 set statusline+=%= " Switch to the right side
 set statusline+=%1*\ lin:\ %l   " Current line
 set statusline+=%2*\/\%L        " Total lines
@@ -316,6 +323,9 @@ hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
 hi User3 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 hi User4 ctermfg=black ctermbg=green guibg=#ff8700 guifg=#444444
 hi User5 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
+hi User6 ctermfg=black ctermbg=green guibg=#404040 guifg=#8fbfdc
+hi User7 ctermfg=black ctermbg=green guifg=#444444 guibg=#ffd700
+hi User8 ctermfg=black ctermbg=green guibg=#444444 guifg=#ffd700
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
