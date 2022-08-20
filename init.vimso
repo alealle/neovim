@@ -29,7 +29,6 @@ call plug#begin('~/.config/nvim/plugins')
     Plug 'nvim-telescope/telescope.nvim'    
     Plug 'morhetz/gruvbox' 
     Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-fugitive'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -48,7 +47,7 @@ let mapleader = ","
 
 " Fast saving
 nmap <leader>w :w!<cr>
-
+nmap <leader>kkk :echo "kkk"
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
