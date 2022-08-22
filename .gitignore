@@ -1,1 +1,4 @@
-:so init.vim
+undo-dir/*
+plugins/*
+colors/*
+
