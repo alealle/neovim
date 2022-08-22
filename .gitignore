@@ -1,4 +1,4 @@
 undo-dir/*
 plugins/*
 colors/*
-
+plugins/vim-surround/*
