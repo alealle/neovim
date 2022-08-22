@@ -1,4 +1,4 @@
-~/.config/nvim/undo-dir/*
-~/.config/nvim/plugins/*
-~/.config/nvim/colors/*
-˜/.config/nvim/plugins/vim-surround/*
+plugins/nerdtree/
+plugins/vim-surround/
+undo-dir/%Users%alessandroalle%.config%nvim%.gitignore
+undo-dir/%Users%alessandroalle%.config%nvim%test.txt/.config/nvim/undo-dir/*
