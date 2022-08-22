@@ -170,11 +170,25 @@ set ffs=unix,dos,mac
 set nobackup
 set nowb
 set noswapfile
-set undodir=~/.config/nvim/undo-dir
-set undofile
-
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Turn persistent undo on 
+"    means that you can undo even when you close a buffer/VIM
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+try
+    set undodir=~/.config/nvim/undo-dir
+    set undofile
+catch /Cannot open/
+    echo "Unable to open undo-dir!!!"
+endtry
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Writes buffer when new buffer opened and in other cases
+" where some distration may result in data loss - seen help
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autowrite
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use spaces instead of tabs
@@ -326,7 +340,69 @@ map <leader>x :e ~/buffer.md<cr>
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Command mode related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart mappings on the command line
+" cno $h e ~/
+" cno $d e ~/Desktop/
+" cno $j e ./
+" cno $c e <C-\>eCurrentFileDir("e")<cr>
+
+" $q is super useful when browsing on the command line
+" it deletes everything until the last slash 
+cno $q <C-\>eDeleteTillSlash()<cr>
+
+" Bash like keys for the command line
+cnoremap <C-A>		<Home>
+cnoremap <C-E>		<End>
+cnoremap <C-K>		<C-U>
+
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
+
+" Do :help cope if you are unsure what cope is. It's super useful!
+"
+" When you search with Ack, display your results in cope by doing:
+"   <leader>cc
+"
+" To go to the next search result do:
+"   <leader>n
+"
+" To go to the previous search results do:
+"   <leader>p
+"
+map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+" Make sure that enter is never overriden in the quickfix window
+autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Parenthesis/bracket
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+" vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+" vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+" vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+" vnoremap $q <esc>`>a'<esc>`<i'<esc>
+" vnoremap $e <esc>`>a`<esc>`<i`<esc>
 " 
+"  Map auto complete of (, ", ', [
+" inoremap $1 ()<esc>i
+" inoremap $2 []<esc>i
+" inoremap $3 {}<esc>i
+" inoremap $4 {<esc>o}<esc>O
+" inoremap $q ''<esc>i
+" inoremap $e ""<esc>i
+
+ 
 """"""""""""""""""""""""""""""
 " => Plugins configuration
 """"""""""""""""""""""""""""""
@@ -467,3 +543,86 @@ function! StatuslineGit()
   let l:branchname = GitBranch()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':""
 endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+func! DeleteTillSlash()
+    let g:cmd = getcmdline()
+
+    if has("win16") || has("win32")
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+    else
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+    endif
+
+    if g:cmd == g:cmd_edited
+        if has("win16") || has("win32")
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+        else
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+        endif
+    endif   
+
+    return g:cmd_edited
+endfunc
+
+func! CurrentFileDir(cmd)
+    return a:cmd . " " . expand("%:p:h") . "/"
+endfunc
+
+"=================================================================================
+"
+"   Following file contains the commands on how to run the currently open code.
+"   The default mapping is set to F5 like most code editors.
+"   Change it as you feel comfortable with, keeping in mind that it does not
+"   clash with any other keymapping.
+"
+"   NOTE: Compilers for different systems may differ. For example, in the case
+"   of C and C++, we have assumed it to be gcc and g++ respectively, but it may
+"   not be the same. It is suggested to check first if the compilers are installed
+"   before running the code, or maybe even switch to a different compiler.
+"
+"   NOTE: Adding support for more programming languages
+"
+"   Just add another elseif block before the 'endif' statement in the same
+"   way it is done in each case. Take care to add tabbed spaces after each
+"   elseif block (similar to python). For example:
+"
+"   elseif &filetype == '<your_file_extension>'
+"       exec '!<your_compiler> %'
+"
+"   NOTE: The '%' sign indicates the name of the currently open file with extension.
+"         The time command displays the time taken for execution. Remove the
+"         time command if you dont want the system to display the time
+"
+"=================================================================================
+
+map <F5> :call CompileRun()<CR>
+imap <F5> <Esc>:call CompileRun()<CR>
+vmap <F5> <Esc>:call CompileRun()<CR>
+
+func! CompileRun()
+exec "w"
+if &filetype == 'c'
+    exec "!gcc % -o %<"
+    exec "!time ./%<"
+elseif &filetype == 'cpp'
+    exec "!g++ % -o %<"
+    exec "!time ./%<"
+elseif &filetype == 'java'
+    exec "!javac %"
+    exec "!time java %"
+elseif &filetype == 'sh'
+    exec "!time bash %"
+elseif &filetype == 'python'
+    exec "!time python3 %"
+elseif &filetype == 'html'
+    exec "!google-chrome % &"
+elseif &filetype == 'go'
+    exec "!go build %<"
+    exec "!time go run %"
+elseif &filetype == 'matlab'
+    exec "!time octave %"
+endif
+endfunc
