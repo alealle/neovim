@@ -34,12 +34,12 @@
 " -> Installation with vim plug 
 call plug#begin('~/.config/nvim/plugins')
 " call plug#begin('~/.vim/plugged')
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim'    
-    Plug 'morhetz/gruvbox' 
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-fugitive'
-    Plug 'preservim/nerdtree'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'    
+Plug 'morhetz/gruvbox' 
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 " -> Configuration and mapping
@@ -242,8 +242,8 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Specify the behavior when switching between buffers
 try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
+    set switchbuf=useopen,usetab,newtab
+    set stal=2
 catch
 endtry
 
@@ -291,6 +291,14 @@ nmap _ dd2kp
 " Insert date
 noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')
 
+" Surround text with simbol
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+
+" Edit init.vim
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" Source init.vim
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
 " -> Insert mode
 " Closing parenthesis. escape it using ctrl + v before typing the mapped char like ( { etc
 inoremap " ""<left>
@@ -302,15 +310,12 @@ inoremap { {}<left>
 " Bash like keys for the command line
 inoremap <C-A>	<Home>
 inoremap <C-E>	<End>
-inoremap <C-K>	<C-U>
 
-"  Map auto complete of (, ", ', [
-" inoremap $1 ()<esc>i
-" inoremap $2 []<esc>i
-" inoremap $3 {}<esc>i
-" inoremap $4 {<esc>o}<esc>O
-" inoremap $q ''<esc>i
-" inoremap $e ""<esc>i
+imap <C-d>  <esc>xi
+imap <C-f> <esc>d$a
+
+"Re-map jk to go to normal mode
+inoremap jk <esc>
 
 " -> Visual mode related
 
@@ -318,6 +323,10 @@ inoremap <C-K>	<C-U>
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
+" Move a line of text using ALT+[jk] or Command+[jk] on mac
+vmap <leader>mj :m'>+<cr>`<my`>mzgv`yo`z
+vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 
 " vnoremap $1 <esc>`>a)<esc>`<i(<esc>
 " vnoremap $2 <esc>`>a]<esc>`<i[<esc>
@@ -331,14 +340,13 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " it deletes everything until the last slash 
 cno $q <C-\>eDeleteTillSlash()<cr>
 
- 
+
 " Bash like keys for the command line
 cnoremap <C-A>	<Home>
 cnoremap <C-E>	<End>
-cnoremap <C-K>	<C-U>
 
-cnoremap <C-P> <Up>
-cnoremap <C-N> <Down>
+"cnoremap <C-P> <Up>
+"cnoremap <C-N> <Down>
 
 " Smart mappings on the command line
 " cno $h e ~/
@@ -406,26 +414,26 @@ hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
 
 " Status Line Custom
 let g:currentmode={
-    \ 'n'  : 'Normal',
-    \ 'no' : 'Normal·Operator Pending',
-    \ 'v'  : 'Visual',
-    \ 'V'  : 'V·Line',
-    \ '^V' : 'V·Block',
-    \ 's'  : 'Select',
-    \ 'S'  : 'S·Line',
-    \ '^S' : 'S·Block',
-    \ 'i'  : 'Insert',
-    \ 'R'  : 'Replace',
-    \ 'Rv' : 'V·Replace',
-    \ 'c'  : 'Command',
-    \ 'cv' : 'Vim Ex',
-    \ 'ce' : 'Ex',
-    \ 'r'  : 'Prompt',
-    \ 'rm' : 'More',
-    \ 'r?' : 'Confirm',
-    \ '!'  : 'Shell',
-    \ 't'  : 'Terminal'
-    \}
+            \ 'n'  : 'Normal',
+            \ 'no' : 'Normal·Operator Pending',
+            \ 'v'  : 'Visual',
+            \ 'V'  : 'V·Line',
+            \ '^V' : 'V·Block',
+            \ 's'  : 'Select',
+            \ 'S'  : 'S·Line',
+            \ '^S' : 'S·Block',
+            \ 'i'  : 'Insert',
+            \ 'R'  : 'Replace',
+            \ 'Rv' : 'V·Replace',
+            \ 'c'  : 'Command',
+            \ 'cv' : 'Vim Ex',
+            \ 'ce' : 'Ex',
+            \ 'r'  : 'Prompt',
+            \ 'rm' : 'More',
+            \ 'r?' : 'Confirm',
+            \ '!'  : 'Shell',
+            \ 't'  : 'Terminal'
+            \}
 "
 " Format the status line
 set statusline=
@@ -464,27 +472,6 @@ function! HasPaste()
     return ''
 endfunction
 
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
-
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
-
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
-
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
-endfunction
-
 function! CmdLine(str)
     call feedkeys(":" . a:str)
 endfunction
@@ -516,12 +503,12 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 
 function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+    return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
 endfunction
 
 function! StatuslineGit()
-  let l:branchname = GitBranch()
-  return strlen(l:branchname) > 0?'  '.l:branchname.' ':""
+    let l:branchname = GitBranch()
+    return strlen(l:branchname) > 0?'  '.l:branchname.' ':""
 endfunction
 
 func! DeleteTillSlash()
@@ -547,6 +534,27 @@ endfunc
 func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
+
+" Don't close window, when deleting a buffer
+autocmd! BufDelete call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
 
 "=================================================================================
 "
@@ -582,7 +590,7 @@ vmap <F5> <Esc>:call CompileRun()<CR>
 
 func! CompileRun()
     exec "w"
-        if &filetype == 'c'
+    if &filetype == 'c'
         exec "!gcc % -o %<"
         exec "!time ./%<"
     elseif &filetype == 'cpp'
@@ -605,3 +613,13 @@ func! CompileRun()
     endif
 endfunc
 
+
+" => Formatting specific file types
+map lolcalleader ;
+" -> Commenting
+"  :autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+autocmd FileType python nnoremap <buffer> <localleader>c I# <esc>$
+autocmd FileType javascript nnoremap <buffer> <localleader>c I// <esc>$
+autocmd FileType vim nnoremap <buffer> <localleader>c I<C-O>" <esc>
+autocmd FileType c nnoremap <buffer> <localleader>c I/<esc>$
+autocmd FileType html nnoremap <buffer> <localleader>c 0i<!<esc>$a/><esc>$
