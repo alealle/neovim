@@ -1,5 +1,6 @@
 plugins/nerdtree/
 plugins/vim-surround/
+undo-dir/*
 undo-dir/%Users%alessandroalle%.config%nvim%.gitignore
 undo-dir/%Users%alessandroalle%.config%nvim%test.txt
 plugins/*

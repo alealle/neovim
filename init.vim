@@ -3,26 +3,35 @@
 "       Alessandro Alle
 "
 " Sections:
-"    -> Plugins
-"    -> General
-"    -> NeoVIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
-"    -> Visual mode related
-"    -> Moving around, tabs and buffers
-"    -> Editing mappings
-"    -> vimgrep searching and cope displaying
-"    -> Spell checking
-"    -> Misc
-"    -> Status line
-"    -> Helper functions
+"    => Plugins
+"      -> Installation with vim plug
+"      -> Configuration and mapping
+"    => Settings
+"        -> NeoVIM user interface
+"        -> Colors and Fonts
+"        -> Files and backups
+"        -> Text, tab and indent related
+"    => Mappings
+"       -> All 
+"           :> Buffers
+"           :> Tabs
+"           :> Windows
+"       -> Insert mode
+"       -> Visual mode 
+"       -> Command line
+"       -> vimgrep searching and cope displaying
+"       -> Spell checking
+"    => Misc
+"    => Status line
+"    => Helper functions
+"    => Compilation with F5
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugins installation with vim plug
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugins 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -> Installation with vim plug 
 call plug#begin('~/.config/nvim/plugins')
 " call plug#begin('~/.vim/plugged')
     Plug 'nvim-lua/plenary.nvim'
@@ -33,71 +42,43 @@ call plug#begin('~/.config/nvim/plugins')
     Plug 'preservim/nerdtree'
 call plug#end()
 
+" -> Configuration and mapping
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Nerd Tree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
+let g:NERDTreeWinPos = "right"
+let NERDTreeShowHidden=0
+let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+let g:NERDTreeWinSize=35
+map <leader>nn :NERDTreeToggle<cr>
+map <leader>nb :NERDTreeFromBookmark<Space>
+map <leader>nf :NERDTreeFind<cr>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Settings 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"-> NeoVim user interface
 " Sets how many lines of history has to remember
 set history=500
 
-" Set to auto read when a file is changed from the outside
-set autoread
-au FocusGained,BufEnter * checktime
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
-
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
-
-" Turn on the Wild menu
-set wildmenu
-
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-if has("win16") || has("win32")
-    set wildignore+=.git\*,.hg\*,.svn\*
-else
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-endif
-
 " Always show current position
 set ruler
+
 " Set number
 set relativenumber
 set nu
 
-"Height of the command bar
-set cmdheight=1
-
-" A buffer becomes hidden when it is abandoned
-set hidden
-
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
 " Ignore case when searching
-set ignorecase
+" set ignorecase
 
 " When searching try to be smart about cases
 set smartcase
 
-" Do not highlight search results
+" Highlight search results
 set hlsearch
 
-" Ma'es search act like search in modern browsers
+" Makes search act like search in modern browsers
 set incsearch
 
 "Enable incremental command: see live effects of substitutions in a split window
@@ -128,13 +109,43 @@ set foldcolumn=1
 set signcolumn=yes
 
 " Alert if editing goes further column 80
-set colorcolumn=80
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set colorcolumn=80 
 
-"Syntax theme
-" True color
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Set to auto read when a file is changed from the outside
+set autoread
+au FocusGained,BufEnter * checktime
+
+" A buffer becomes hidden when it is abandoned
+set hidden
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
+" Set 7 lines to the cursor - when moving vertically using j/k
+set so=7
+
+" Turn on the Wild menu
+set wildmenu
+
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+
+" -> Colors and Fonts
+"Syntax theme: use true color and winblend if available
 if exists("&termguicolors") && exists("&winblend")
     " Enable syntax highlighting
     syntax enable
@@ -143,6 +154,7 @@ if exists("&termguicolors") && exists("&winblend")
     set wildoptions=pum
     set pumblend=5
 endif
+
 " Use gruvbox colors
 colorscheme gruvbox
 set background=dark
@@ -150,11 +162,12 @@ set background=dark
 "' Set cursor to bar in insert modee
 let &t_SI="\e[6 q"
 let &t_EI="\e[2 q"
-"
-"
+
 " Set highlight line when in insert mode
 :autocmd InsertEnter * set cul
 :autocmd InsertLeave * set nocul
+
+" -> Files, backups and undo
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -162,19 +175,12 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn backup off, since most stuff is in SVN, git etc. anyway...
 set nobackup
 set nowb
 set noswapfile
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Turn persistent undo on 
-"    means that you can undo even when you close a buffer/VIM
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Turn persistent undo on means that you can undo even when you close a buffer/VIM
 try
     set undodir=~/.config/nvim/undo-dir
     set undofile
@@ -182,15 +188,11 @@ catch /Cannot open/
     echo "Unable to open undo-dir!!!"
 endtry
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Writes buffer when new buffer opened and in other cases
+" Writes buffer when new buffer opened and in other cases
 " where some distration may result in data loss - seen help
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autowrite
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -> Text, tab and indent related
 " Use spaces instead of tabs
 set expandtab
 
@@ -215,27 +217,17 @@ set scrolloff=8
 " Disable comment sign insertion in a new line after C-r in a comment line
 set formatoptions-=cro 
 
-"""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
-" Visual mode pressing * or # searches for the current selection
-" Super useful! From an idea by Michael Naumann
-vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
+" => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -> All modes
+" Remap VIM 0 to first non-blank character
+map 0 ^
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
 
-" Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
+" :> Buffers
 " Close the current buffer
 map <leader>bd :Bclose<cr>:tabclose<cr>gT
 
@@ -245,6 +237,20 @@ map <leader>ba :bufdo bd<cr>
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
 
+" Switch CWD to the directory of the open buffer
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Specify the behavior when switching between buffers
+try
+  set switchbuf=useopen,usetab,newtab
+  set stal=2
+catch
+endtry
+
+" Return to last edit position when opening files (You want this!)
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" :> Tabs
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
@@ -261,25 +267,16 @@ au TabLeave * let g:lasttab = tabpagenr()
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 
-" Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+" :> Windows
+" Smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
-" Specify the behavior when switching between buffers
-try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
-catch
-endtry
-
-" Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remap VIM 0 to first non-blank character
-map 0 ^
+" -> Normal mode
+" Make sure that enter is never overriden in the quickfix window
+autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 nmap <leader>mj mz:m+<cr>`z
@@ -287,21 +284,14 @@ nmap <leader>mk mz:m-2<cr>`z
 vmap <leader>mj :m'>+<cr>`<my`>mzgv`yo`z
 vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 
-nmap <leader>cs cs
-" Delete trailing white space on save, useful for some filetypes ;)
-fun! CleanExtraSpaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    silent! %s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
-endfun
+" Or, simpler shortcuts:
+nmap - ddp
+nmap _ dd2kp
 
-if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee, *.vim, *.c, *.cpp,
-                \*.cs, *.dat, *.h, *.md :call CleanExtraSpaces()
-endif
+" Insert date
+noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')
 
+" -> Insert mode
 " Closing parenthesis. escape it using ctrl + v before typing the mapped char like ( { etc
 inoremap " ""<left>
 inoremap ' ''<left>
@@ -309,57 +299,54 @@ inoremap ( ()<left>
 inoremap [ []<left>
 inoremap { {}<left>
 
-" Insert date
-noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')
+" Bash like keys for the command line
+inoremap <C-A>	<Home>
+inoremap <C-E>	<End>
+inoremap <C-K>	<C-U>
 
+"  Map auto complete of (, ", ', [
+" inoremap $1 ()<esc>i
+" inoremap $2 []<esc>i
+" inoremap $3 {}<esc>i
+" inoremap $4 {<esc>o}<esc>O
+" inoremap $q ''<esc>i
+" inoremap $e ""<esc>i
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
+" -> Visual mode related
 
-" Shortcuts using <leader>
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
+" Visual mode pressing * or # searches for the current selection
+" Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+" vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+" vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+" vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+" vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+" vnoremap $q <esc>`>a'<esc>`<i'<esc>
+" vnoremap $e <esc>`>a`<esc>`<i`<esc>
 
-" Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
+" -> Command mode 
+" $q is super useful when browsing on the command line
+" it deletes everything until the last slash 
+cno $q <C-\>eDeleteTillSlash()<cr>
 
-" Quickly open a markdown buffer for scribble
-map <leader>x :e ~/buffer.md<cr>
+ 
+" Bash like keys for the command line
+cnoremap <C-A>	<Home>
+cnoremap <C-E>	<End>
+cnoremap <C-K>	<C-U>
 
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Command mode related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Smart mappings on the command line
 " cno $h e ~/
 " cno $d e ~/Desktop/
 " cno $j e ./
 " cno $c e <C-\>eCurrentFileDir("e")<cr>
 
-" $q is super useful when browsing on the command line
-" it deletes everything until the last slash 
-cno $q <C-\>eDeleteTillSlash()<cr>
-
-" Bash like keys for the command line
-cnoremap <C-A>		<Home>
-cnoremap <C-E>		<End>
-cnoremap <C-K>		<C-U>
-
-cnoremap <C-P> <Up>
-cnoremap <C-N> <Down>
+" -> Vimgrep searching and cope displaying
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
@@ -380,46 +367,33 @@ map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 map <leader>n :cn<cr>
 map <leader>p :cp<cr>
 
-" Make sure that enter is never overriden in the quickfix window
-autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+
+" -> Spell checking
+" Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+" Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Delete trailing spaces for certain file types
+if has("autocmd")
+    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee, *.vim, *.c, *.cpp,
+                \*.cs, *.dat, *.h, *.md :call CleanExtraSpaces()
+endif
+
+" Quickly open a buffer for scribble
+map <leader>q :e ~/buffer<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Parenthesis/bracket
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-" vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-" vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-" vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-" vnoremap $q <esc>`>a'<esc>`<i'<esc>
-" vnoremap $e <esc>`>a`<esc>`<i`<esc>
-" 
-"  Map auto complete of (, ", ', [
-" inoremap $1 ()<esc>i
-" inoremap $2 []<esc>i
-" inoremap $3 {}<esc>i
-" inoremap $4 {<esc>o}<esc>O
-" inoremap $q ''<esc>i
-" inoremap $e ""<esc>i
-
- 
-""""""""""""""""""""""""""""""
-" => Plugins configuration
-""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Nerd Tree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=0
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let g:NERDTreeWinSize=35
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>nb :NERDTreeFromBookmark<Space>
-map <leader>nf :NERDTreeFind<cr>
-
-""""""""""""""""""""""""""""""
 " => Status line
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always show the status line
 set laststatus=2
 
@@ -459,18 +433,15 @@ set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
 set statusline+=%1*%{StatuslineGit()}
 set statusline+=%2*\%{HasPaste()}
 set statusline+=%3*\%{expand('%:~:h')}/
-set statusline+=%4*\%t\%m%r%h%w\                       " File name, modified, readonly, helpfile, preview
+set statusline+=%4*\%t\%m%r%h%w\          " File name, modified, readonly, helpfile, preview
 set statusline+=%5*\ %y
 set statusline+=\%<\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\%<\[%{&fileformat}\]
-" /Users/alessandroalle/
-"let g:nome=getcwd()
-"let g:patMyCurrDirAb =substitute(g:nome, "/Users/\\w\\{1,}", "~","")
 set statusline+=%= " Switch to the right side
 set statusline+=%6*\ %<CWD>\ \%{expand('%:~:h')}\/
 set statusline+=%7*\ %p%%\       " % of file
 set statusline+=%3*\ %l:%c\      " Current line
-set statusline+=%8*\ %n\                                 " Buffer number
+set statusline+=%8*\ %n\         " Buffer number
 
 hi User1 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
 hi User2 ctermfg=yellow ctermbg=black guibg=#ff8700 guifg=#444444
@@ -518,6 +489,15 @@ function! CmdLine(str)
     call feedkeys(":" . a:str)
 endfunction
 
+" Delete trailing white space on save, useful for some filetypes ;)
+fun! CleanExtraSpaces()
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+    silent! %s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+endfun
+
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
     execute "normal! vgvy"
@@ -544,9 +524,6 @@ function! StatuslineGit()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':""
 endfunction
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 func! DeleteTillSlash()
     let g:cmd = getcmdline()
 
@@ -573,6 +550,7 @@ endfunc
 
 "=================================================================================
 "
+"   => Compilation with F5
 "   Following file contains the commands on how to run the currently open code.
 "   The default mapping is set to F5 like most code editors.
 "   Change it as you feel comfortable with, keeping in mind that it does not
@@ -603,26 +581,27 @@ imap <F5> <Esc>:call CompileRun()<CR>
 vmap <F5> <Esc>:call CompileRun()<CR>
 
 func! CompileRun()
-exec "w"
-if &filetype == 'c'
-    exec "!gcc % -o %<"
-    exec "!time ./%<"
-elseif &filetype == 'cpp'
-    exec "!g++ % -o %<"
-    exec "!time ./%<"
-elseif &filetype == 'java'
-    exec "!javac %"
-    exec "!time java %"
-elseif &filetype == 'sh'
-    exec "!time bash %"
-elseif &filetype == 'python'
-    exec "!time python3 %"
-elseif &filetype == 'html'
-    exec "!google-chrome % &"
-elseif &filetype == 'go'
-    exec "!go build %<"
-    exec "!time go run %"
-elseif &filetype == 'matlab'
-    exec "!time octave %"
-endif
+    exec "w"
+        if &filetype == 'c'
+        exec "!gcc % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'java'
+        exec "!javac %"
+        exec "!time java %"
+    elseif &filetype == 'sh'
+        exec "!time bash %"
+    elseif &filetype == 'python'
+        exec "!time python3 %"
+    elseif &filetype == 'html'
+        exec "!google-chrome % &"
+    elseif &filetype == 'go'
+        exec "!go build %<"
+        exec "!time go run %"
+    elseif &filetype == 'matlab'
+        exec "!time octave %"
+    endif
 endfunc
+
