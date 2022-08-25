@@ -12,12 +12,12 @@
 "        -> Files and backups
 "        -> Text, tab and indent related
 "    => Mappings
-"       -> All 
+"       -> All
 "           :> Buffers
 "           :> Tabs
 "           :> Windows
 "       -> Insert mode
-"       -> Visual mode 
+"       -> Visual mode
 "       -> Command line
 "       -> vimgrep searching and cope displaying
 "       -> Spell checking
@@ -29,15 +29,14 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugins 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" -> Installation with vim plug 
+" => Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" -> Installation with vim plug
 call plug#begin('~/.config/nvim/plugins')
 " call plug#begin('~/.vim/plugged')
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'    
-Plug 'morhetz/gruvbox' 
-Plug 'tpope/vim-surround'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 call plug#end()
@@ -54,10 +53,11 @@ map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Settings 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 "-> NeoVim user interface
 " Sets how many lines of history has to remember
 set history=500
@@ -102,6 +102,9 @@ set novisualbell
 set t_vb=
 set tm=500
 
+" Command line height
+set cmdheight=2
+
 " Add a bit extra margin to the left
 set foldcolumn=1
 
@@ -109,7 +112,7 @@ set foldcolumn=1
 set signcolumn=yes
 
 " Alert if editing goes further column 80
-set colorcolumn=80 
+set colorcolumn=80
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -121,13 +124,6 @@ au FocusGained,BufEnter * checktime
 
 " A buffer becomes hidden when it is abandoned
 set hidden
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
 
 " Set 7 lines to the cursor - when moving vertically using j/k
 set so=7
@@ -142,7 +138,6 @@ if has("win16") || has("win32")
 else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
-
 
 " -> Colors and Fonts
 "Syntax theme: use true color and winblend if available
@@ -164,8 +159,11 @@ let &t_SI="\e[6 q"
 let &t_EI="\e[2 q"
 
 " Set highlight line when in insert mode
-:autocmd InsertEnter * set cul
-:autocmd InsertLeave * set nocul
+augroup InsertLine
+    :autocmd!
+    :autocmd InsertEnter * set cul
+    :autocmd InsertLeave * set nocul
+augroup END
 
 " -> Files, backups and undo
 
@@ -215,12 +213,13 @@ set nowrap "nowrap lines
 set scrolloff=8
 
 " Disable comment sign insertion in a new line after C-r in a comment line
-set formatoptions-=cro 
+set formatoptions=jcql
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " -> All modes
 " Remap VIM 0 to first non-blank character
 map 0 ^
@@ -247,9 +246,6 @@ try
 catch
 endtry
 
-" Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
 " :> Tabs
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
@@ -275,8 +271,14 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 " -> Normal mode
+" With a map leader it's possible to do extra key combinations
+let mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
 " Make sure that enter is never overriden in the quickfix window
-autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+autocmd! BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 nmap <leader>mj mz:m+<cr>`z
@@ -335,9 +337,9 @@ vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 " vnoremap $q <esc>`>a'<esc>`<i'<esc>
 " vnoremap $e <esc>`>a`<esc>`<i`<esc>
 
-" -> Command mode 
+" -> Command mode
 " $q is super useful when browsing on the command line
-" it deletes everything until the last slash 
+" it deletes everything until the last slash
 cno $q <C-\>eDeleteTillSlash()<cr>
 
 
@@ -386,30 +388,46 @@ map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Commands specific for .vim files
+augroup filetype_vim
+    au!
+    au FileType vim setlocal foldmethod=marker
+augroup END
+
+" Quick open init.vim
+map <leader>v :split ~/.config/nvim/init.vim<cr>
+
 " Delete trailing spaces for certain file types
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee, *.vim, *.c, *.cpp,
-                \*.cs, *.dat, *.h, *.md :call CleanExtraSpaces()
+    autocmd! BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
 endif
-
+" ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
+"                \*.cs, *.dat,*.h, *.md
 " Quickly open a buffer for scribble
 map <leader>q :e ~/buffer<cr>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Status line
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " Always show the status line
 set laststatus=2
 
 " status bar colors
-au InsertEnter * hi statusline guibg=black guifg=#00d700 ctermfg=black ctermbg=green
-au InsertLeave * hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
-au ModeChanged *:[vV\x16]* hi statusline guibg=black guifg=pink ctermfg=black ctermbg=magenta
-au ModeChanged [vV\x16]*:* hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+augroup StatusBarCol
+    au!
+    au InsertEnter * hi statusline guibg=black guifg=#00d700 ctermfg=black ctermbg=green
+    au InsertLeave * hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+    au ModeChanged *:[vV\x16]* hi statusline guibg=black guifg=pink ctermfg=black ctermbg=magenta
+    au ModeChanged [vV\x16]*:* hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+augroup END
+
 hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
 
 " Status Line Custom
@@ -447,9 +465,9 @@ set statusline+=\%<\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\%<\[%{&fileformat}\]
 set statusline+=%= " Switch to the right side
 set statusline+=%6*\ %<CWD>\ \%{expand('%:~:h')}\/
-set statusline+=%7*\ %p%%\       " % of file
-set statusline+=%3*\ %l:%c\      " Current line
-set statusline+=%8*\ %n\         " Buffer number
+set statusline+=%7*\ %3p%%\       " % of file
+set statusline+=%3*\ %4l:%2c\      " Current line
+set statusline+=%8*\ %2n\         " Buffer number
 
 hi User1 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
 hi User2 ctermfg=yellow ctermbg=black guibg=#ff8700 guifg=#444444
@@ -461,9 +479,11 @@ hi User7 ctermfg=007 ctermbg=236 guifg=#303030 guibg=#adadad
 hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " Returns true if paste mode is enabled
 function! HasPaste()
     if &paste
@@ -480,7 +500,8 @@ endfunction
 fun! CleanExtraSpaces()
     let save_cursor = getpos(".")
     let old_query = getreg('/')
-    silent! %s/\s\+$//e
+    silent! :%s/\s\+$//g
+    echom "apagou"
     call setpos('.', save_cursor)
     call setreg('/', old_query)
 endfun
@@ -526,7 +547,7 @@ func! DeleteTillSlash()
         else
             let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
         endif
-    endif   
+    endif
 
     return g:cmd_edited
 endfunc
@@ -556,9 +577,12 @@ function! <SID>BufcloseCloseIt()
     endif
 endfunction
 
-"=================================================================================
-"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   => Compilation with F5
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+"
 "   Following file contains the commands on how to run the currently open code.
 "   The default mapping is set to F5 like most code editors.
 "   Change it as you feel comfortable with, keeping in mind that it does not
@@ -582,7 +606,8 @@ endfunction
 "         The time command displays the time taken for execution. Remove the
 "         time command if you dont want the system to display the time
 "
-"=================================================================================
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 map <F5> :call CompileRun()<CR>
 imap <F5> <Esc>:call CompileRun()<CR>
@@ -613,13 +638,21 @@ func! CompileRun()
     endif
 endfunc
 
-
-" => Formatting specific file types
-map lolcalleader ;
 " -> Commenting
 "  :autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
-autocmd FileType python nnoremap <buffer> <localleader>c I# <esc>$
-autocmd FileType javascript nnoremap <buffer> <localleader>c I// <esc>$
-autocmd FileType vim nnoremap <buffer> <localleader>c I<C-O>" <esc>
-autocmd FileType c nnoremap <buffer> <localleader>c I/<esc>$
-autocmd FileType html nnoremap <buffer> <localleader>c 0i<!<esc>$a/><esc>$
+augroup CommentGroup
+    autocmd! FileType
+    autocmd FileType python nnoremap <buffer> <localleader>c I# <esc>$
+    autocmd FileType javascript nnoremap <buffer> <localleader>c I// <esc>$
+    autocmd FileType vim nnoremap <buffer> <localleader>c I<C-O>" <esc>
+    autocmd FileType c nnoremap <buffer> <localleader>c I/<esc>$
+    autocmd FileType html nnoremap <buffer> <localleader>c 0i<!<esc>$a/><esc>$
+augroup END
+
+" Return to last edit position when opening files (You want this!)
+augroup LastPosition
+    au! BufReadPost
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
