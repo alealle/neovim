@@ -27,6 +27,8 @@
 "    => Compilation with F5
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" With a map leader it's possible to do extra key combinations
+let mapleader = ","
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
@@ -46,7 +48,7 @@ call plug#end()
 " :> Nerd Tree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=0
+let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 let g:NERDTreeWinSize=35
 map <leader>nn :NERDTreeToggle<cr>
@@ -100,7 +102,7 @@ set mat=2
 set noerrorbells
 set novisualbell
 set t_vb=
-set tm=500
+set tm=700
 
 " Command line height
 set cmdheight=2
@@ -120,7 +122,10 @@ set whichwrap+=<,>,h,l
 
 " Set to auto read when a file is changed from the outside
 set autoread
-au FocusGained,BufEnter * checktime
+augroup ChekTime
+    autocmd!
+    au FocusGained,BufEnter * checktime
+augroup END
 
 " A buffer becomes hidden when it is abandoned
 set hidden
@@ -212,9 +217,6 @@ set nowrap "nowrap lines
 " Let scroll off when close to end of lines to keep view more centered
 set scrolloff=8
 
-" Disable comment sign insertion in a new line after C-r in a comment line
-set formatoptions=jcql
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -222,22 +224,30 @@ set formatoptions=jcql
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " -> All modes
 " Remap VIM 0 to first non-blank character
-map 0 ^
+nnoremap 0 ^
 " Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
+nnoremap <silent> <leader><cr> :noh<cr>
 
 " :> Buffers
 " Close the current buffer
-map <leader>bd :Bclose<cr>:tabclose<cr>gT
+nnoremap <leader>bd :Bclose<cr>:tabclose<cr>gT
 
 " Close all the buffers
-map <leader>ba :bufdo bd<cr>
+nnoremap <leader>ba :bufdo bd<cr>
 
-map <leader>l :bnext<cr>
-map <leader>h :bprevious<cr>
+noremap <leader>bn :bnext<cr>
+noremap <leader>bp :bprevious<cr>
+noremap <leader>B :buffers<cr>
+noremap <leader>bm :buffer<space>
+
+let i = 1
+while i <= 9
+    execute "nnoremap <leader>bg" . i . " :" . i . "buffer<cr>"
+    let i = i + 1
+endwhile
 
 " Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Specify the behavior when switching between buffers
 try
@@ -248,34 +258,46 @@ endtry
 
 " :> Tabs
 " Useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-map <leader>t<leader> :tabnext
+noremap <leader>tn :tabnew<cr>
+noremap <leader>to :tabonly<cr>
+noremap <leader>tc :tabclose<cr>
+noremap <leader>tm :tabmove
+noremap <leader>t<leader> :tabnext
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
+nnoremap <Leader>tl :exe "tabn ".g:lasttab<CR>
+augroup LastTab
+    au!
+    au TabLeave * let g:lasttab = tabpagenr()
+augroup end
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+nnoremap <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 
 " :> Windows
 " Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+
+" Move around windows using numbers
+let i =1
+while i <= 9
+    execute "nnoremap <C-W>" . i . " :" . i . "wincmd w<cr>"
+    let i = i + 1
+endwhile
 
 " -> Normal mode
-" With a map leader it's possible to do extra key combinations
-let mapleader = ","
-
 " Fast saving
-nmap <leader>w :w!<cr>
+nnoremap <leader>w :w!<cr>
+nnoremap <leader>wa :wa!<cr>
+
+"Always perform very magic search
+nnoremap / /\v
+nnoremap <leader>:s :%s /\v//g<left><left><left>
 
 " Make sure that enter is never overriden in the quickfix window
 autocmd! BufReadPost quickfix nnoremap <buffer> <CR> <CR>
@@ -287,8 +309,8 @@ vmap <leader>mj :m'>+<cr>`<my`>mzgv`yo`z
 vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 
 " Or, simpler shortcuts:
-nmap - ddp
-nmap _ dd2kp
+nnoremap - ddp
+nnoremap _ dd2kp
 
 " Insert date
 noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')
@@ -313,8 +335,18 @@ inoremap { {}<left>
 inoremap <C-A>	<Home>
 inoremap <C-E>	<End>
 
-imap <C-d>  <esc>xi
-imap <C-f> <esc>d$a
+" Foward delete
+inoremap <C-d>  <C-o>x
+
+" Delete all line
+inoremap <C-l> <C-o>dd
+
+" Delete all line until the cursor: use CTRL-u that is the system default
+" Replace current line
+inoremap <C-e> <esc>ddO
+
+" Windows CRTL-Z
+inoremap <C-z> <C-o>u
 
 "Re-map jk to go to normal mode
 inoremap jk <esc>
@@ -340,7 +372,7 @@ vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 " -> Command mode
 " $q is super useful when browsing on the command line
 " it deletes everything until the last slash
-cno $q <C-\>eDeleteTillSlash()<cr>
+cnoremap $q <C-\>eDeleteTillSlash()<cr>
 
 
 " Bash like keys for the command line
@@ -351,12 +383,12 @@ cnoremap <C-E>	<End>
 "cnoremap <C-N> <Down>
 
 " Smart mappings on the command line
-" cno $h e ~/
-" cno $d e ~/Desktop/
-" cno $j e ./
-" cno $c e <C-\>eCurrentFileDir("e")<cr>
+cnoremap $h e ~/
+cnoremap $d e ~/Desktop/
+cnoremap $j e ./
+cnoremap $c e <C-\>eCurrentFileDir("e")<cr>
 
-" -> Vimgrep searching and cope displaying
+" -> Grep and Vimgrep searching and cope displaying
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
@@ -377,6 +409,8 @@ map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 map <leader>n :cn<cr>
 map <leader>p :cp<cr>
 
+nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<cr>:copen<cr>
+nnoremap <leader>gw :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<cr>:copen<cr>
 
 " -> Spell checking
 " Pressing ,ss will toggle and untoggle spell checking
@@ -393,14 +427,19 @@ map <leader>s? z=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Command for all groups
+augroup file_all
+    autocmd!
+    " Disable comment sign insertion in a new line after C-r in a comment line
+    autocmd FileType * set formatoptions=jcql
+    autocmd FileType * set foldlevelstart=0
+augroup END
+
 " Commands specific for .vim files
 augroup filetype_vim
     au!
     au FileType vim setlocal foldmethod=marker
 augroup END
-
-" Quick open init.vim
-map <leader>v :split ~/.config/nvim/init.vim<cr>
 
 " Delete trailing spaces for certain file types
 if has("autocmd")
@@ -482,8 +521,36 @@ hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Grep mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+
 " Returns true if paste mode is enabled
 function! HasPaste()
     if &paste
@@ -501,7 +568,6 @@ fun! CleanExtraSpaces()
     let save_cursor = getpos(".")
     let old_query = getreg('/')
     silent! :%s/\s\+$//g
-    echom "apagou"
     call setpos('.', save_cursor)
     call setreg('/', old_query)
 endfun
