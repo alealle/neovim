@@ -3,5 +3,10 @@ plugins/vim-surround/
 undo-dir/*
 undo-dir/%Users%alessandroalle%.config%nvim%.gitignore
 undo-dir/%Users%alessandroalle%.config%nvim%test.txt
+plugins/NeoSolarized/
+plugins/gruvbox/
+plugins/plenary.nvim/
+plugins/telescope.nvim/
+plugins/vim-fugitive/
 after/*
 .DS_STORE
