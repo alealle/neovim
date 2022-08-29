@@ -36,13 +36,14 @@ let mapleader = ","
 " -> Installation with vim plug
 call plug#begin('~/.config/nvim/plugins')
 " call plug#begin('~/.vim/plugged')
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'morhetz/gruvbox'
-Plug 'tpope/vim-fugitive'
-Plug 'preservim/nerdtree'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'morhetz/gruvbox'
+    Plug 'tpope/vim-fugitive'
+    Plug 'preservim/nerdtree'
+    Plug 'tpope/vim-surround'
 call plug#end()
-
+source ~/.config/nvim/plugins/grep-operator.vim
 " -> Configuration and mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
@@ -391,7 +392,7 @@ cnoremap $c e <C-\>eCurrentFileDir("e")<cr>
 " -> Grep and Vimgrep searching and cope displaying
 
 " When you press <leader>r you can search and replace the selected text
-vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
+" vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
@@ -404,13 +405,13 @@ vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
 " To go to the previous search results do:
 "   <leader>p
 "
-map <leader>cc :botright cope<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-map <leader>n :cn<cr>
-map <leader>p :cp<cr>
+" map <leader>cc :botright cope<cr>
+" map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+" map <leader>n :cn<cr>
+" map <leader>p :cp<cr>
 
-nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<cr>:copen<cr>
-nnoremap <leader>gw :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<cr>:copen<cr>
+" nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<cr>:copen<cr>
+" nnoremap <leader>gw :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<cr>:copen<cr>
 
 " -> Spell checking
 " Pressing ,ss will toggle and untoggle spell checking
