@@ -324,6 +324,9 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " Source init.vim
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+" Open register list and pass specific register
+nnoremap <leader>"p :reg <bar> exec 'normal! "' . input('>').'p'<cr>
+
 " -> Insert mode
 " Closing parenthesis. escape it using ctrl + v before typing the mapped char like ( { etc
 inoremap " ""<left>
