@@ -36,12 +36,13 @@ let mapleader = ","
 " -> Installation with vim plug
 call plug#begin('~/.config/nvim/plugins')
 " call plug#begin('~/.vim/plugged')
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim'
-    Plug 'morhetz/gruvbox'
-    Plug 'tpope/vim-fugitive'
-    Plug 'preservim/nerdtree'
-    Plug 'tpope/vim-surround'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'morhetz/gruvbox'
+Plug 'tpope/vim-fugitive'
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-sensible'
 call plug#end()
 source ~/.config/nvim/plugins/grep-operator.vim
 " -> Configuration and mapping
@@ -110,6 +111,10 @@ set cmdheight=2
 
 " Add a bit extra margin to the left
 set foldcolumn=1
+
+" Set fold options for all files
+set foldlevelstart=0
+set foldmethod=marker
 
 " Add a sign column to facilitate Lint signaling syntax errors etc
 set signcolumn=yes
@@ -316,9 +321,6 @@ nnoremap _ dd2kp
 " Insert date
 noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')
 
-" Surround text with simbol
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-
 " Edit init.vim
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " Source init.vim
@@ -436,13 +438,6 @@ augroup file_all
     autocmd!
     " Disable comment sign insertion in a new line after C-r in a comment line
     autocmd FileType * set formatoptions=jcql
-    autocmd FileType * set foldlevelstart=0
-augroup END
-
-" Commands specific for .vim files
-augroup filetype_vim
-    au!
-    au FileType vim setlocal foldmethod=marker
 augroup END
 
 " Delete trailing spaces for certain file types
