@@ -34,17 +34,18 @@ let mapleader = ","
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " -> Installation with vim plug
-call plug#begin('~/.config/nvim/plugins')
-" call plug#begin('~/.vim/plugged')
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'morhetz/gruvbox'
-Plug 'tpope/vim-fugitive'
-Plug 'preservim/nerdtree'
-Plug 'tpope/vim-surround'
+call plug#begin()
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'tpope/vim-fugitive'
+    Plug 'preservim/nerdtree'
+    Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-sensible'
 call plug#end()
-source ~/.config/nvim/plugins/grep-operator.vim
+" User defined plugins
+" call plug#begin('~/.config/nvim/my_plugins')
+"    Plug './grep-operator'
+" call plug#end()
 " -> Configuration and mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
@@ -198,8 +199,7 @@ catch /Cannot open/
 endtry
 
 " Writes buffer when new buffer opened and in other cases
-" where some distration may result in data loss - seen help
-set autowrite
+" where some distration may result in data loss - seen set autowrite
 
 " -> Text, tab and indent related
 " Use spaces instead of tabs
@@ -327,7 +327,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " Open register list and pass specific register
-nnoremap <leader>"p :reg <bar> exec 'normal! "' . input('>').'p'<cr>
+nnoremap "p :reg <bar> exec 'normal! "' . input('>').'p'<cr>
 
 " -> Insert mode
 " Closing parenthesis. escape it using ctrl + v before typing the mapped char like ( { etc
@@ -367,13 +367,6 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 vmap <leader>mj :m'>+<cr>`<my`>mzgv`yo`z
 vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
-
-" vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-" vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-" vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-" vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-" vnoremap $q <esc>`>a'<esc>`<i'<esc>
-" vnoremap $e <esc>`>a`<esc>`<i`<esc>
 
 " -> Command mode
 " $q is super useful when browsing on the command line
@@ -504,7 +497,7 @@ set statusline+=\%<\[%{&fileformat}\]
 set statusline+=%= " Switch to the right side
 set statusline+=%6*\ %<CWD>\ \%{expand('%:~:h')}\/
 set statusline+=%7*\ %3p%%\       " % of file
-set statusline+=%3*\ %4l:%2c\      " Current line
+set statusline+=%3*\ %4l/%L:%2c\      " Current line
 set statusline+=%8*\ %2n\         " Buffer number
 
 hi User1 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
