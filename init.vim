@@ -2,8 +2,6 @@
 " Author:
 "       Alessandro Alle
 "
-" Sections:
-"    => Plugins
 "      -> Installation with vim plug
 "      -> Configuration and mapping
 "    => Settings
@@ -19,11 +17,12 @@
 "       -> Insert mode
 "       -> Visual mode
 "       -> Command line
-"       -> vimgrep searching and cope displaying
 "       -> Spell checking
 "    => Misc
 "    => Status line
 "    => Helper functions
+"    => Development tools
+"       -> LSP
 "    => Compilation with F5
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,6 +39,7 @@ call plug#begin()
     Plug 'tpope/vim-fugitive'
     Plug 'preservim/nerdtree'
     Plug 'tpope/vim-surround'
+    Plug 'neovim/nvim-lspconfig'
 " Plug 'tpope/vim-sensible'
 call plug#end()
 " User defined plugins
@@ -267,8 +267,16 @@ endtry
 noremap <leader>tn :tabnew<cr>
 noremap <leader>to :tabonly<cr>
 noremap <leader>tc :tabclose<cr>
-noremap <leader>tm :tabmove
-noremap <leader>t<leader> :tabnext
+noremap <leader>tm :tabmove<cr>
+noremap <leader>tn :tabnext<cr>
+noremap <leader>tp :tabp<cr>
+noremap <S-TAB> gT
+
+let i = 1
+while i <= 9
+            execute "nnoremap <ESC>" . i  "> " . i . "gt"
+    let i = i + 1
+endwhile
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -342,7 +350,7 @@ inoremap <C-A>	<Home>
 inoremap <C-E>	<End>
 
 " Foward delete
-inoremap <C-d>  <C-o>x
+inoremap <F2>  <C-o>x
 
 " Delete all line
 inoremap <C-l> <C-o>dd
@@ -352,7 +360,7 @@ inoremap <C-l> <C-o>dd
 inoremap <C-e> <esc>ddO
 
 " Windows CRTL-Z
-inoremap <C-z> <C-o>u
+inoremap <F3> <C-o>u
 
 "Re-map jk to go to normal mode
 inoremap jk <esc>
@@ -390,7 +398,7 @@ cnoremap $c e <C-\>eCurrentFileDir("e")<cr>
 " -> Grep and Vimgrep searching and cope displaying
 
 " When you press <leader>r you can search and replace the selected text
-" vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
+vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
@@ -403,13 +411,13 @@ cnoremap $c e <C-\>eCurrentFileDir("e")<cr>
 " To go to the previous search results do:
 "   <leader>p
 "
-" map <leader>cc :botright cope<cr>
-" map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-" map <leader>n :cn<cr>
-" map <leader>p :cp<cr>
+map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
 
-" nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<cr>:copen<cr>
-" nnoremap <leader>gw :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<cr>:copen<cr>
+nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<cr>:copen<cr>
+nnoremap <leader>gw :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<cr>:copen<cr>
 
 " -> Spell checking
 " Pressing ,ss will toggle and untoggle spell checking
@@ -511,12 +519,6 @@ hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Grep mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
@@ -638,6 +640,24 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Development tools
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+"
+" -> Language servers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python: requires pyright. Type in shell: npm i -g pyright
+lua require'lspconfig'.pyright.setup{}
+
+" Neovim: no requirements
+lua require'lspconfig'.vimls.setup{}
+
+" Bash script: no requirements
+lua require'lspconfig'.bashls.setup{GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh)"}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   => Compilation with F5
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 "
@@ -671,8 +691,12 @@ map <F5> :call CompileRun()<CR>
 imap <F5> <Esc>:call CompileRun()<CR>
 vmap <F5> <Esc>:call CompileRun()<CR>
 
+map <F8> :call Build()<CR>
+imap <F8> <Esc>:call Build()<CR>
+vmap <F8> <Esc>:call Build()<CR>
+
 func! CompileRun()
-    exec "w"
+    write
     if &filetype == 'c'
         exec "!gcc % -o %<"
         exec "!time ./%<"
@@ -685,7 +709,8 @@ func! CompileRun()
     elseif &filetype == 'sh'
         exec "!time bash %"
     elseif &filetype == 'python'
-        exec "!time python3 %"
+        exec "terminal time python3 %"
+        normal! a
     elseif &filetype == 'html'
         exec "!google-chrome % &"
     elseif &filetype == 'go'
@@ -695,6 +720,34 @@ func! CompileRun()
         exec "!time octave %"
     endif
 endfunc
+
+func! Build()
+    if !exists("current_compiler")
+        if (&filetype == 'c')
+            let current_compiler = "gcc"
+            set makeprg=make\ %<.o
+        elseif (&filetype == 'cpp')
+            let current_compiler = "g++"
+            set makeprg=make\ %<.o
+        elseif &filetype == 'python'
+            let current_compiler = "python"
+            compiler pyunit
+            set makeprg=python3\ %
+        elseif &filetype == 'sh'
+            let current_complier = "shellcheck"
+            set makeprg=shellcheck\ -f\ gcc\ %
+            set errorformat=%f:%l:%c:\ %trror:\ %m\ [SC%n],
+               \%f:%l:%c:\ %tarning:\ %m\ [SC%n],
+               \%f:%l:%c:\ %tote:\ %m\ [SC%n],
+               \%-G%.%#
+     endif
+   endif
+
+   write
+   make
+   copen
+
+endfunction
 
 " -> Commenting
 "  :autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
