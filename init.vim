@@ -2,6 +2,7 @@
 " Author:
 "       Alessandro Alle
 "
+"    => Plugins
 "      -> Installation with vim plug
 "      -> Configuration and mapping
 "    => Settings
@@ -18,12 +19,12 @@
 "       -> Visual mode
 "       -> Command line
 "       -> Spell checking
-"    => Misc
 "    => Status line
 "    => Helper functions
 "    => Development tools
 "       -> LSP
 "    => Compilation with F5
+"    => Misc
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " With a map leader it's possible to do extra key combinations
@@ -47,6 +48,7 @@ call plug#end()
 "    Plug './grep-operator'
 " call plug#end()
 " -> Configuration and mapping
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -58,6 +60,17 @@ map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Telescope
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fp <cmd>Telescope registers<cr>
+nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
+nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -199,7 +212,8 @@ catch /Cannot open/
 endtry
 
 " Writes buffer when new buffer opened and in other cases
-" where some distration may result in data loss - seen set autowrite
+" where some distration may result in data loss - seen
+set autowrite
 
 " -> Text, tab and indent related
 " Use spaces instead of tabs
@@ -405,7 +419,7 @@ vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
 " When you search with Ack, display your results in cope by doing:
 "   <leader>cc
 "
-" To go to the next search result do:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               " To go to the next search result do:
 "   <leader>n
 "
 " To go to the previous search results do:
@@ -428,27 +442,6 @@ map <leader>sn ]s
 map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
-" Command for all groups
-augroup file_all
-    autocmd!
-    " Disable comment sign insertion in a new line after C-r in a comment line
-    autocmd FileType * set formatoptions=jcql
-augroup END
-
-" Delete trailing spaces for certain file types
-if has("autocmd")
-    autocmd! BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
-endif
-" ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
-"                \*.cs, *.dat,*.h, *.md
-" Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
@@ -561,7 +554,7 @@ endfunction
 fun! CleanExtraSpaces()
     let save_cursor = getpos(".")
     let old_query = getreg('/')
-    silent! :%s/\s\+$//g
+    :silent! %s/\s\+$//g
     call setpos('.', save_cursor)
     call setreg('/', old_query)
 endfun
@@ -645,6 +638,9 @@ endfunction
 "
 " -> Language servers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Clang
+lua require'lspconfig'.clangd.setup{}
+
 " Python: requires pyright. Type in shell: npm i -g pyright
 lua require'lspconfig'.pyright.setup{}
 
@@ -654,7 +650,12 @@ lua require'lspconfig'.vimls.setup{}
 " Bash script: no requirements
 lua require'lspconfig'.bashls.setup{GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh)"}
 
-
+" -> Create/ update tag files
+augroup Tagging
+    autocmd! BufWritePost
+    au BufWritePost *.c,*.cpp,*.cs,*.h,*.py,*.sh,*.zsh,*.java,*.js,*.sql silent! !ctags -R &
+augroup END
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -749,16 +750,40 @@ func! Build()
 
 endfunction
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " -> Commenting
+" For specific file types
 "  :autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
 augroup CommentGroup
     autocmd! FileType
     autocmd FileType python nnoremap <buffer> <localleader>c I# <esc>$
     autocmd FileType javascript nnoremap <buffer> <localleader>c I// <esc>$
     autocmd FileType vim nnoremap <buffer> <localleader>c I<C-O>" <esc>
-    autocmd FileType c nnoremap <buffer> <localleader>c I/<esc>$
+    autocmd FileType c nnoremap <buffer> <localleader>c I//<esc>$
     autocmd FileType html nnoremap <buffer> <localleader>c 0i<!<esc>$a/><esc>$
 augroup END
+" Command for all groups
+augroup file_all
+    autocmd!
+    " Disable comment sign insertion in a new line after C-r in a comment line
+    autocmd FileType * set formatoptions=jcql
+augroup END
+
+"-> Trailing spaces
+" Delete trailing spaces for certain file types
+if has("autocmd")
+    autocmd! BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
+endif
+" ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
+"                \*.cs, *.dat,*.h, *.md
+
+" -> Editing tips
+" Quickly open a buffer for scribble
+map <leader>q :e ~/buffer<cr>
 
 " Return to last edit position when opening files (You want this!)
 augroup LastPosition
