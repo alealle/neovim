@@ -41,6 +41,7 @@ call plug#begin()
     Plug 'preservim/nerdtree'
     Plug 'tpope/vim-surround'
     Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-treesitter/nvim-treesitter'
 " Plug 'tpope/vim-sensible'
 call plug#end()
 " User defined plugins
@@ -51,7 +52,7 @@ call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:NERDTreeWinPos = "right"
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
@@ -62,7 +63,7 @@ map <leader>nf :NERDTreeFind<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Telescope
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -71,6 +72,23 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fp <cmd>Telescope registers<cr>
 nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
 nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Treesitter
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+exec "silent! TSUpdate"
+" 1) Ensure that ordinary languages are installed
+" 2) Install parsers synchronously (only applied to `ensure_installed`)
+" 3) Automatically install missing parsers when entering buffer
+" 4) Highlight: `false` will disable the whole extension
+lua require'nvim-treesitter.configs'.setup {
+            \ensure_installed = {"c", "cpp","c_sharp", "python", "html", "css",
+            \"bash", "sql", "java", "javascript", "lua","vim"},
+            \sync_install = false,
+            \auto_install = true,
+            \highlight = {enable = true, disable = {"vim"},
+            \additional_vim_regex_highlighting = false},
+            \indent = {enable = true, disable = {}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -129,6 +147,9 @@ set foldcolumn=1
 " Set fold options for all files
 set foldlevelstart=0
 set foldmethod=marker
+" To be tried: tree-sitter expr folding
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
 
 " Add a sign column to facilitate Lint signaling syntax errors etc
 set signcolumn=yes
@@ -232,6 +253,7 @@ set tw=500
 
 set ai "Auto indent
 set si "Smart indent
+filetype indent on "automatically triggers C indent
 set nowrap "nowrap lines
 
 " Let scroll off when close to end of lines to keep view more centered
@@ -348,6 +370,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " Source init.vim
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+nnoremap <leader>;; :silent!<cr>:execute 'set nohlsearch'<cr>
 " Open register list and pass specific register
 nnoremap "p :reg <bar> exec 'normal! "' . input('>').'p'<cr>
 
@@ -357,7 +380,9 @@ inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
 inoremap [ []<left>
+" Curly: inserts breakln in order to make cindent work properly when defining functions f(...){
 inoremap { {}<left>
+inoremap {<cr> {<cr>}<esc>O
 
 " Bash like keys for the command line
 inoremap <C-A>	<Home>
@@ -699,10 +724,12 @@ vmap <F8> <Esc>:call Build()<CR>
 func! CompileRun()
     write
     if &filetype == 'c'
-        exec "!gcc % -o %<"
+        set makeprg=make\ %<.o
+        make
         exec "!time ./%<"
     elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
+        set makeprg=make\ %<.o
+        make
         exec "!time ./%<"
     elseif &filetype == 'java'
         exec "!javac %"
