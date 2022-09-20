@@ -56,6 +56,7 @@ call plug#begin()
     " Ultisnip: Snippets are separated from the engine. Add this if you want them:
     Plug 'honza/vim-snippets'
     Plug 'nvim-lualine/lualine.nvim'
+    Plug 'kyazdani42/nvim-tree.lua'
     Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 " User defined plugins
@@ -475,7 +476,6 @@ augroup Python
 augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Lualine
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
@@ -483,6 +483,39 @@ augroup END
 lua << END
 require('lualine').setup()
 END
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> nvim-tree
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Following changes in config acc. https://github.com/kyazdani42/nvim-tree.lua
+lua << END
+    -- disable netrw at the very start of your init.lua (strongly advised)
+    vim.g.loaded = 1
+    vim.g.loaded_netrwPlugin = 1
+
+    require("nvim-tree").setup({
+      sort_by = "case_sensitive",
+      view = {
+        adaptive_size = true,
+        mappings = {
+          list = {
+            { key = "u", action = "dir_up" },
+          },
+        },
+      },
+      renderer = {
+        group_empty = true,
+      },
+      filters = {
+        dotfiles = true,
+      },
+    })
+END
+" Mappings
+noremap <leader>. :NvimTreeToggle<cr>
+noremap <leader>/ :NvimTreeFindFile<cr>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
