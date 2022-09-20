@@ -42,7 +42,21 @@ call plug#begin()
     Plug 'tpope/vim-surround'
     Plug 'neovim/nvim-lspconfig'
     Plug 'nvim-treesitter/nvim-treesitter'
-" Plug 'tpope/vim-sensible'
+    Plug 'glepnir/lspsaga.nvim'
+    Plug 'p00f/nvim-ts-rainbow'
+    Plug 'python/black'
+    " Cmp: all plugins required
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
+    Plug 'hrsh7th/nvim-cmp'
+    " Ultisnip: Track the engine.
+    Plug 'SirVer/ultisnips'
+    " Ultisnip: Snippets are separated from the engine. Add this if you want them:
+    Plug 'honza/vim-snippets'
+    Plug 'nvim-lualine/lualine.nvim'
+    Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 " User defined plugins
 " call plug#begin('~/.config/nvim/my_plugins')
@@ -52,7 +66,7 @@ call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 let g:NERDTreeWinPos = "right"
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
@@ -61,9 +75,347 @@ map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+" :> LSP-config
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+"
+" -> Language servers
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local protocol = require('vim.lsp.protocol')
+-- This is the default in Nvim 0.7+
+local lsp_flags = {
+  debounce_text_changes = 150,
+}
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+    -- Key bindings suggested by LSP-config page on github
+    -- See `:help vim.diagnostic.*` for documentation on any of the below functions
+    local opts = { noremap=true, silent=true }
+    -- Mappings for all buffers
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- Enable autoformat
+    -- vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr(#{timeout_ms:250})')
+    -- Mappings buffer dependent
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', '<space>h', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<space>s', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wl', function()
+     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, bufopts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', '<space>gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+    --  Format on save
+    if client.resolved_capabilities.document_formatting then
+         vim.api.nvim_command[[augroup Format]]
+         vim.api.nvim_command[[autocmd! * <buffer>]]
+         vim.api.nvim_command[[autocmd BufWritePre <buffer> lua
+                                vim.lsp.buf.formatting_seq_sync()]]
+         vim.api.nvim_command[[augroup END]]
+         vim.api.nvim_command[[echom "formatted"]]
+    else
+         vim.api.nvim_command[[echom "client's does not support formatting"]]
+    end
+end
+
+-- Clang:
+require'lspconfig'.clangd.setup{
+     on_attach = on_attach,
+     flags = lsp_flags,
+}
+
+-- Python:
+require'lspconfig'.pyright.setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+
+-- Neovim: no requirements
+require'lspconfig'.vimls.setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+
+--- Bash: no requirements
+require'lspconfig'.bashls.setup{
+    GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh|.zshrc)",
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+
+-- Lua
+require'lspconfig'.sumneko_lua.setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
+
+-- Typescript:
+require'lspconfig'.tsserver.setup{
+    on_attach = on_attach,
+    filetypes = {"typescript", "typescriptreact", "typescript.tsx"},
+    flags = lspflags,
+    settings = {documentFormatting = true}
+}
+
+EOF
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Lspsaga
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+lua << EOF
+local keymap = vim.keymap.set
+local saga = require('lspsaga')
+
+saga.init_lsp_saga
+{
+    border_style = "rounded"
+}
+
+-- Lsp finder find the symbol definition implement reference
+-- if there is no implement it will hide
+-- when you use action in finder like open vsplit then you can
+-- use <C-t> to jump back
+keymap("n", "<leader>F", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
+
+-- Code action
+keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
+
+-- Rename
+keymap("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", { silent = true })
+
+-- Peek Definition
+-- you can edit the definition file in this flaotwindow
+-- also support open/vsplit/etc operation check definition_action_keys
+-- support tagstack C-t jump back
+keymap("n", "<leader>d", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+
+-- Show line diagnostics
+keymap("n", "<leader>a", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
+
+-- Show cursor diagnostic
+keymap("n", "<leader>A", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { silent = true })
+
+-- Diagnsotic jump can use `<c-o>` to jump back
+keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { silent = true })
+keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true })
+
+-- Only jump to error
+keymap("n", "[E", function()
+  require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+end, { silent = true })
+keymap("n", "]E", function()
+  require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+end, { silent = true })
+
+-- Outline
+keymap("n","<leader>o", "<cmd>LSoutlineToggle<CR>",{ silent = true })
+
+-- Hover Doc
+keymap("n", "<leader>h", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+
+-- Float terminal
+keymap("n", "<leader>i", "<cmd>Lspsaga open_floaterm<CR>", { silent = true })
+-- if you want pass somc cli command into terminal you can do like this
+-- open lazygit in lspsaga float terminal
+keymap("n", "<leader>I", "<cmd>Lspsaga open_floaterm lazygit<CR>", { silent = true })
+-- close floaterm
+keymap("t", "<leader>i", [[<C-\><C-n><cmd>Lspsaga close_floaterm<CR>]], { silent = true })
+EOF
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Snippets - Ultisnip
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Completion
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Autocompletion on every buffer, independent of lsp
+
+set completeopt=menu,menuone,noselect
+
+lua <<EOF
+    --   פּ ﯟ   some other good icons
+    local kind_icons = {
+      Text = "",
+      Method = "m",
+      Function = "",
+      Constructor = "",
+      Field = "",
+      Variable = "",
+      Class = "",
+      Interface = "",
+      Module = "",
+      Property = "",
+      Unit = "",
+      Value = "",
+      Enum = "",
+      Keyword = "",
+      Snippet = "",
+      Color = "",
+      File = "",
+      Reference = "",
+      Folder = "",
+      EnumMember = "",
+      Constant = "",
+      Struct = "",
+      Event = "",
+      Operator = "",
+      TypeParameter = "",
+    }
+  -- Set up nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+     documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      -- Accept currently selected item.
+      -- Set `select` to `false` to only confirm explicitly selected items.
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    }),
+    formatting = {
+        fields = { "kind", "abbr", "menu" },
+        format = function(entry, vim_item)
+          -- Kind icons
+          vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+          -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+          vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            luasnip = "[Snippet]",
+            buffer = "[Buffer]",
+            path = "[Path]",
+          })[entry.source.name]
+          return vim_item
+        end,
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+         { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Set configuration for specific filetype.
+  -- cmp.setup.filetype('gitcommit', {
+  --  sources = cmp.config.sources({
+  --     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+  --   }, {
+  --     { name = 'buffer' },
+  --   })
+  -- })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  -- Set up lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.
+                                make_client_capabilities())
+  -- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['clangd'].setup {
+    capabilities = capabilities}
+  require('lspconfig')['pyright'].setup {
+    capabilities = capabilities}
+  require('lspconfig')['vimls'].setup {
+    capabilities = capabilities}
+  require('lspconfig')['bashls'].setup {
+    capabilities = capabilities}
+  require('lspconfig')['sumneko_lua'].setup {
+    capabilities = capabilities}
+  require('lspconfig')['tsserver'].setup {
+    capabilities = capabilities}
+EOF
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Telescope
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -72,24 +424,68 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fp <cmd>Telescope registers<cr>
 nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
 nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
+""""""""""""za"""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Treesitter
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 exec "silent! TSUpdate"
 " 1) Ensure that ordinary languages are installed
 " 2) Install parsers synchronously (only applied to `ensure_installed`)
 " 3) Automatically install missing parsers when entering buffer
 " 4) Highlight: `false` will disable the whole extension
+" 5) For rainbow (ts-rainbow plugin):
+            " a) disable: list of languages you want to disable the plugin for
+            " b) extended_mode: also highlight non-bracket delimiters like html
+            " tags, boolean or table: lang -> boolean
+            " c) max_file_lines: do not enable for files with more than n lines,
+            " int
 lua require'nvim-treesitter.configs'.setup {
             \ensure_installed = {"c", "cpp","c_sharp", "python", "html", "css",
-            \"bash", "sql", "java", "javascript", "lua","vim"},
+            \"bash", "sql", "java", "javascript", "typescript", "lua","vim"},
             \sync_install = false,
             \auto_install = true,
-            \highlight = {enable = true, disable = {"vim"},
-            \additional_vim_regex_highlighting = false},
-            \indent = {enable = true, disable = {}}}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+            \highlight = {
+                \enable = true, disable = {""},
+                \additional_vim_regex_highlighting = false
+                \},
+            \rainbow = {
+                \enable = true,
+                \disable = {},
+                \extended_mode = true,
+                \max_file_lines = nil,
+                \},
+            \indent = {
+                \enable = true,
+                \disable = {'c','cpp','c_sharp', 'h', 'java'}
+                \}
+            \}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Black
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Python starts faster:
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+" Python Black save on format
+augroup Python
+    autocmd!
+    au BufWritePost *.py exec ':Black'
+augroup END
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" :> Lualine
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+" Default config according to https://github.com/nvim-lualine/lualine.nvim
+lua << END
+require('lualine').setup()
+END
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings
@@ -471,71 +867,71 @@ map <leader>s? z=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Status line
+" => Status line: my initial configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " Always show the status line
-set laststatus=2
-
-" status bar colors
-augroup StatusBarCol
-    au!
-    au InsertEnter * hi statusline guibg=black guifg=#00d700 ctermfg=black ctermbg=green
-    au InsertLeave * hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
-    au ModeChanged *:[vV\x16]* hi statusline guibg=black guifg=pink ctermfg=black ctermbg=magenta
-    au ModeChanged [vV\x16]*:* hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
-augroup END
-
-hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
-
-" Status Line Custom
-let g:currentmode={
-            \ 'n'  : 'Normal',
-            \ 'no' : 'Normal·Operator Pending',
-            \ 'v'  : 'Visual',
-            \ 'V'  : 'V·Line',
-            \ '^V' : 'V·Block',
-            \ 's'  : 'Select',
-            \ 'S'  : 'S·Line',
-            \ '^S' : 'S·Block',
-            \ 'i'  : 'Insert',
-            \ 'R'  : 'Replace',
-            \ 'Rv' : 'V·Replace',
-            \ 'c'  : 'Command',
-            \ 'cv' : 'Vim Ex',
-            \ 'ce' : 'Ex',
-            \ 'r'  : 'Prompt',
-            \ 'rm' : 'More',
-            \ 'r?' : 'Confirm',
-            \ '!'  : 'Shell',
-            \ 't'  : 'Terminal'
-            \}
+" set laststatus=2
 "
-" Format the status line
-set statusline=
-set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
-set statusline+=%1*%{StatuslineGit()}
-set statusline+=%2*\%{HasPaste()}
-set statusline+=%3*\%{expand('%:~:h')}/
-set statusline+=%4*\%t\%m%r%h%w\          " File name, modified, readonly, helpfile, preview
-set statusline+=%5*\ %y
-set statusline+=\%<\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\%<\[%{&fileformat}\]
-set statusline+=%= " Switch to the right side
-set statusline+=%6*\ %<CWD>\ \%{expand('%:~:h')}\/
-set statusline+=%7*\ %3p%%\       " % of file
-set statusline+=%3*\ %4l/%L:%2c\      " Current line
-set statusline+=%8*\ %2n\         " Buffer number
-
-hi User1 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
-hi User2 ctermfg=yellow ctermbg=black guibg=#ff8700 guifg=#444444
-hi User3 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
-hi User4 ctermfg=black ctermbg=yellow guifg=#444444 guibg=#af8700
-hi User5 ctermfg=yellow ctermbg=black guibg=#444444 guifg=#ffd700
-hi User6 ctermfg=cyan ctermbg=black guibg=#d7ffff guifg=#444444
-hi User7 ctermfg=007 ctermbg=236 guifg=#303030 guibg=#adadad
-hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
-
-
+" " status bar colors
+" augroup StatusBarCol
+"     au!
+"     au InsertEnter * hi statusline guibg=black guifg=#00d700 ctermfg=black ctermbg=green
+"     au InsertLeave * hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+"     au ModeChanged *:[vV\x16]* hi statusline guibg=black guifg=pink ctermfg=black ctermbg=magenta
+"     au ModeChanged [vV\x16]*:* hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+" augroup END
+"
+" hi statusline guibg=black guifg=#8fbfdc ctermfg=black ctermbg=cyan
+"
+" " Status Line Custom
+" let g:currentmode={
+"             \ 'n'  : 'Normal',
+"             \ 'no' : 'Normal·Operator Pending',
+"             \ 'v'  : 'Visual',
+"             \ 'V'  : 'V·Line',
+"             \ '^V' : 'V·Block',
+"             \ 's'  : 'Select',
+"             \ 'S'  : 'S·Line',
+"             \ '^S' : 'S·Block',
+"             \ 'i'  : 'Insert',
+"             \ 'R'  : 'Replace',
+"             \ 'Rv' : 'V·Replace',
+"             \ 'c'  : 'Command',
+"             \ 'cv' : 'Vim Ex',
+"             \ 'ce' : 'Ex',
+"             \ 'r'  : 'Prompt',
+"             \ 'rm' : 'More',
+"             \ 'r?' : 'Confirm',
+"             \ '!'  : 'Shell',
+"             \ 't'  : 'Terminal'
+"             \}
+" "
+" " Format the status line
+" set statusline=
+" set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
+" set statusline+=%1*%{StatuslineGit()}
+" set statusline+=%2*\%{HasPaste()}
+" set statusline+=%3*\%{expand('%:~:h')}/
+" set statusline+=%4*\%t\%m%r%h%w\          " File name, modified, readonly, helpfile, preview
+" set statusline+=%5*\ %y
+" set statusline+=\%<\ %{&fileencoding?&fileencoding:&encoding}
+" set statusline+=\%<\[%{&fileformat}\]
+" set statusline+=%= " Switch to the right side
+" set statusline+=%6*\ %<CWD>\ \%{expand('%:~:h')}\/
+" set statusline+=%7*\ %3p%%\       " % of file
+" set statusline+=%3*\ %4l/%L:%2c\      " Current line
+" set statusline+=%8*\ %2n\         " Buffer number
+"
+" hi User1 ctermfg=black ctermbg=green guibg=#444444 guifg=#d78700
+" hi User2 ctermfg=yellow ctermbg=black guibg=#ff8700 guifg=#444444
+" hi User3 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
+" hi User4 ctermfg=black ctermbg=yellow guifg=#444444 guibg=#af8700
+" hi User5 ctermfg=yellow ctermbg=black guibg=#444444 guifg=#ffd700
+" hi User6 ctermfg=cyan ctermbg=black guibg=#d7ffff guifg=#444444
+" hi User7 ctermfg=007 ctermbg=236 guifg=#303030 guibg=#adadad
+" hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
+"
+"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -660,26 +1056,12 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Development tools
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
-"
-" -> Language servers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Clang
-lua require'lspconfig'.clangd.setup{}
-
-" Python: requires pyright. Type in shell: npm i -g pyright
-lua require'lspconfig'.pyright.setup{}
-
-" Neovim: no requirements
-lua require'lspconfig'.vimls.setup{}
-
-" Bash script: no requirements
-lua require'lspconfig'.bashls.setup{GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh)"}
-
 " -> Create/ update tag files
 augroup Tagging
     autocmd! BufWritePost
     au BufWritePost *.c,*.cpp,*.cs,*.h,*.py,*.sh,*.zsh,*.java,*.js,*.sql silent! !ctags -R &
 augroup END
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
@@ -803,7 +1185,8 @@ augroup END
 "-> Trailing spaces
 " Delete trailing spaces for certain file types
 if has("autocmd")
-    autocmd! BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
+    autocmd!
+    autocmd BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
 endif
 " ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
 "                \*.cs, *.dat,*.h, *.md
