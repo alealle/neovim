@@ -8,7 +8,6 @@ plugins/gruvbox/
 plugins/plenary.nvim/
 plugins/telescope.nvim/
 plugins/vim-fugitive/
-after/*
 autoload
 colors/
 plugins/vim-sensible/
