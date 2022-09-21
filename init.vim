@@ -30,6 +30,11 @@
 " With a map leader it's possible to do extra key combinations
 let mapleader = ","
 
+" Disable netrw at the very start of your init.lua (strongly advised)
+silent g:loaded = 1
+silent g:loaded_netrwPlugin = 1
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
@@ -38,7 +43,7 @@ call plug#begin()
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'tpope/vim-fugitive'
-    Plug 'preservim/nerdtree'
+    " Plug 'preservim/nerdtree'
     Plug 'tpope/vim-surround'
     Plug 'neovim/nvim-lspconfig'
     Plug 'nvim-treesitter/nvim-treesitter'
@@ -69,14 +74,14 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " :> Nerd Tree
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
-let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=1
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let g:NERDTreeWinSize=35
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>nb :NERDTreeFromBookmark<Space>
-map <leader>nf :NERDTreeFind<cr>
-
+" let g:NERDTreeWinPos = "right"
+" let NERDTreeShowHidden=1
+" let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+" let g:NERDTreeWinSize=35
+" map <leader>nn :NERDTreeToggle<cr>
+" map <leader>nb :NERDTreeFromBookmark<Space>
+" map <leader>nf :NERDTreeFind<cr>
+"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " :> LSP-config
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
@@ -341,7 +346,7 @@ lua <<EOF
       ['<C-e>'] = cmp.mapping.abort(),
       -- Accept currently selected item.
       -- Set `select` to `false` to only confirm explicitly selected items.
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<Tab>'] = cmp.mapping.confirm({ select = true }),
     }),
     formatting = {
         fields = { "kind", "abbr", "menu" },
@@ -459,7 +464,7 @@ lua require'nvim-treesitter.configs'.setup {
                 \},
             \indent = {
                 \enable = true,
-                \disable = {'c','cpp','c_sharp', 'h', 'java'}
+                \disable = {'c','cpp','c_sharp', 'h', 'java', 'python'}
                 \}
             \}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
@@ -484,9 +489,8 @@ augroup END
 let g:cwd = 'cwd: ' . expand('%:~:h')
 lua << END
 
--- Eviline config for lualine
--- Author: shadmansaleh
--- Credit: glepnir
+-- Config for lualine
+-- Credits: shadmansaleh, glepnir
 local lualine = require('lualine')
 
 -- Color table for highlights
@@ -502,6 +506,7 @@ local colors = {
   violet   = '#a9a1e1',
   magenta  = '#c678dd',
   blue     = '#51afef',
+  gray     = 'gray',
   red      = '#ec5f67',
 }
 
@@ -552,6 +557,7 @@ local config = {
     lualine_c = {},
     lualine_x = {},
   },
+  extensions = {'quickfix'}
 }
 
 -- Inserts a component in lualine_c at left section
@@ -578,7 +584,7 @@ ins_left {
   color = function()
     -- auto change color according to neovims mode
     local mode_color = {
-      n = colors.red,
+      n = colors.gray,
       i = colors.green,
       v = colors.blue,
       [''] = colors.blue,
@@ -599,9 +605,9 @@ ins_left {
       ['!'] = colors.red,
       t = colors.red,
     }
-    return { fg = mode_color[vim.fn.mode()] }
+    return {bg = mode_color[vim.fn.mode()], fg = 'black', gui = 'bold' }
   end,
-  padding = { right = 1 },
+  padding = { left = 1, right = 1 },
 }
 
 ins_left {
@@ -611,14 +617,28 @@ ins_left {
 }
 
 ins_left {
+  'o:encoding', -- option component same as &encoding in viml
+  fmt = string.upper, -- I'm not sure why it's upper case either ;)
+  cond = conditions.hide_in_width,
+  color = { fg = colors.green, gui = 'bold' },
+}
+
+ins_left {
+  'filetype',
+  icons_enabled = true,
+  colored = true,   -- Displays filetype icon in color if set to true
+  icon_only = false, -- Display only an icon for filetype
+  icon = { align = 'right' }, -- Display filetype icon on the right hand side
+  -- icon =    {'X', align='right'}
+  -- Icon string ^ in table is ignored in filetype component
+  cond = conditions.buffer_not_empty,
+}
+
+ins_left {
   'filename',
   cond = conditions.buffer_not_empty,
   color = { fg = colors.magenta, gui = 'bold' },
 }
-
-ins_left { 'location' }
-
-ins_left { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
 ins_left {
   'diagnostics',
@@ -661,18 +681,18 @@ ins_left {
 }
 
 -- Add components to right sections
-ins_right {
-  'o:encoding', -- option component same as &encoding in viml
-  fmt = string.upper, -- I'm not sure why it's upper case either ;)
-  cond = conditions.hide_in_width,
-  color = { fg = colors.green, gui = 'bold' },
-}
+
+-- ins_right {
+--   'fileformat',
+--   fmt = string.upper,
+--   icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+--   color = { fg = colors.green, gui = 'bold' },
+-- }
 
 ins_right {
-  'fileformat',
-  fmt = string.upper,
-  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
-  color = { fg = colors.green, gui = 'bold' },
+  'g:cwd',
+  cond = conditions.buffer_not_empty,
+  color = { bg = colors.gray},
 }
 
 ins_right {
@@ -693,6 +713,20 @@ ins_right {
   cond = conditions.hide_in_width,
 }
 
+local lin = '%L'
+lin2 = string.format("[%s]",lin)
+
+ins_right {
+    'lin2',
+    color = { bg = colors.blue, fg = 'darkblue'},
+}
+
+ins_right { 'progress', color = { bg = colors.blue, fg = 'black', gui = 'bold' } }
+
+ins_right { 'location',
+color = { bg = colors.blue, fg = 'black'},
+}
+
 ins_right {
   function()
     return '▊'
@@ -700,7 +734,6 @@ ins_right {
   color = { fg = colors.blue },
   padding = { left = 1 },
 }
-
 -- Now don't forget to initialize lualine
 lualine.setup(config)
 END
@@ -711,11 +744,10 @@ END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
 " Following changes in config acc. https://github.com/kyazdani42/nvim-tree.lua
 lua << END
-    -- disable netrw at the very start of your init.lua (strongly advised)
-    vim.g.loaded = 1
-    vim.g.loaded_netrwPlugin = 1
-
-    require("nvim-tree").setup({
+    require("nvim-tree").setup {
+      disable_netrw = true,
+      hijack_netrw = true,
+      open_on_tab = true,
       sort_by = "case_sensitive",
       view = {
         adaptive_size = true,
@@ -731,7 +763,28 @@ lua << END
       filters = {
         dotfiles = true,
       },
-    })
+     diagnostics = { enable = true },
+     view = {
+        mappings = {
+          list = {
+            { key = "<CR>", action = "tabnew" },
+            { key = "<C-b>", action = "edit" },
+          }
+        },
+        number = true,
+        relativenumber = true,
+      },
+  system_open = {cmd = 'silent toggle_replace'},
+}
+     local function toggle_replace()
+       local view = require"nvim-tree.view"
+       if view.is_visible() then
+         view.close()
+       else
+         require"nvim-tree".open_replacing_current_buffer()
+       end
+     end
+     vim.keymap.set('n', '<C-;>', toggle_replace)
 END
 " Mappings
 noremap <leader>. :NvimTreeToggle<cr>
