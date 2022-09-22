@@ -34,6 +34,9 @@ let mapleader = ","
 silent g:loaded = 1
 silent g:loaded_netrwPlugin = 1
 
+" Python starts faster:
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
@@ -785,5 +788,4 @@ augroup LastPosition
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 augroup END
 nohlsearch
-exe "normal! g'\""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
