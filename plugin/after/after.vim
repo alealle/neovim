@@ -11,3 +11,4 @@
 " Disable comment sign insertion in a new line after C-r in a comment line
 set formatoptions=jcql
 set completeopt=menu,menuone,noselect
+echom "carregado"

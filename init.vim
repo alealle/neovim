@@ -45,7 +45,6 @@ call plug#begin()
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'tpope/vim-fugitive'
-    " Plug 'preservim/nerdtree'
     Plug 'tpope/vim-surround'
     Plug 'neovim/nvim-lspconfig'
     Plug 'nvim-treesitter/nvim-treesitter'
