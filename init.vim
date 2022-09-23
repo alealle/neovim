@@ -28,18 +28,14 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " With a map leader it's possible to do extra key combinations
-let mapleader = ","
-
-" Disable netrw at the very start of your init.lua (strongly advised)
-silent g:loaded = 1
-silent g:loaded_netrwPlugin = 1
+let mapleader = ','
 
 " Python starts faster:
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 " -> Installation with vim plug
 call plug#begin()
     Plug 'nvim-lua/plenary.nvim'
@@ -61,21 +57,25 @@ call plug#begin()
     Plug 'SirVer/ultisnips'
     " Ultisnip: Snippets are separated from the engine. Add this if you want them:
     Plug 'honza/vim-snippets'
+    Plug 'jose-elias-alvarez/null-ls.nvim'
     Plug 'nvim-lualine/lualine.nvim'
     Plug 'kyazdani42/nvim-tree.lua'
     Plug 'kyazdani42/nvim-web-devicons'
     Plug 'vim-scripts/indentpython.vim'
+    Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
+    Plug 'norcalli/nvim-colorizer.lua'
+    Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 call plug#end()
 " User defined plugins
 " call plug#begin('~/.config/nvim/my_plugins')
 "    Plug './grep-operator'
 " call plug#end()
 " -> Configuration and mapping
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 "-> NeoVim user interface
 " Sets how many lines of history has to remember
 set history=500
@@ -84,8 +84,8 @@ set history=500
 set ruler
 
 " Set number
+set number
 set relativenumber
-set nu
 
 " Ignore case when searching
 " set ignorecase
@@ -112,13 +112,13 @@ set magic
 set showmatch
 
 " How many tenths of a second to blink when matching brackets
-set mat=2
+set matchtime=2
 
 " No annoying sound on errors
 set noerrorbells
 set novisualbell
 set t_vb=
-set tm=700
+set timeoutlen=700
 
 " Command line height
 set cmdheight=2
@@ -154,14 +154,14 @@ augroup END
 set hidden
 
 " Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
+set scrolloff=7
 
 " Turn on the Wild menu
 set wildmenu
 
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
-if has("win16") || has("win32")
+if has('win16') || has('win32')
     set wildignore+=.git\*,.hg\*,.svn\*
 else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
@@ -169,7 +169,7 @@ endif
 
 " -> Colors and Fonts
 "Syntax theme: use true color and winblend if available
-if exists("&termguicolors") && exists("&winblend")
+if exists('&termguicolors') && exists('&winblend')
     " Enable syntax highlighting
     syntax enable
     set termguicolors
@@ -199,11 +199,11 @@ augroup END
 set encoding=utf8
 
 " Use Unix as the standard file type
-set ffs=unix,dos,mac
+set fileformats=unix,dos,mac
 
 " Turn backup off, since most stuff is in SVN, git etc. anyway...
 set nobackup
-set nowb
+set nowritebackup
 set noswapfile
 
 " Turn persistent undo on means that you can undo even when you close a buffer/VIM
@@ -211,7 +211,7 @@ try
     set undodir=~/.config/nvim/undo-dir
     set undofile
 catch /Cannot open/
-    echo "Unable to open undo-dir!!!"
+    echo 'Unable to open undo-dir!!!'
 endtry
 
 " Writes buffer when new buffer opened and in other cases
@@ -225,27 +225,27 @@ set expandtab
 " Be smart when using tabs ;)
 set smarttab
 
-" 1 tab == 4 spaces
+" 1 tab ==# 4 spaces
 set shiftwidth=4
 set tabstop=4
 
 " Linebreak on 500 characters
-set lbr
-set tw=500
+set linebreak
+set textwidth=500
 
-set ai "Auto indent
-set si "Smart indent
+set autoindent "Auto indent
+set smartindent "Smart indent
 filetype indent on "automatically triggers C indent
 set nowrap "nowrap lines
 
 " Let scroll off when close to end of lines to keep view more centered
 set scrolloff=8
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 " -> All modes
 " Remap VIM 0 to first non-blank character
 nnoremap 0 ^
@@ -266,7 +266,7 @@ noremap <leader>bm :buffer<space>
 
 let i = 1
 while i <= 9
-    execute "nnoremap <leader>bg" . i . " :" . i . "buffer<cr>"
+    execute 'nnoremap <leader>bg' . i . ' :' . i . 'buffer<cr>'
     let i = i + 1
 endwhile
 
@@ -276,7 +276,7 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 " Specify the behavior when switching between buffers
 try
     set switchbuf=useopen,usetab,newtab
-    set stal=2
+    set showtabline=2
 catch
 endtry
 
@@ -288,11 +288,10 @@ noremap <leader>tc :tabclose<cr>
 noremap <leader>tm :tabmove<cr>
 noremap <leader>tn :tabnext<cr>
 noremap <leader>tp :tabp<cr>
-noremap <S-TAB> gT
 
 let i = 1
 while i <= 9
-            execute "nnoremap <ESC>" . i  "> " . i . "gt"
+            execute 'nnoremap <ESC>' . i  '> ' . i . 'gt'
     let i = i + 1
 endwhile
 
@@ -318,7 +317,7 @@ nnoremap <C-l> <C-W>l
 " Move around windows using numbers
 let i =1
 while i <= 9
-    execute "nnoremap <C-W>" . i . " :" . i . "wincmd w<cr>"
+    execute 'nnoremap <C-W>' . i . ' w' . i . 'wincmd w<cr>'
     let i = i + 1
 endwhile
 
@@ -332,7 +331,10 @@ nnoremap / /\v
 nnoremap <leader>:s :%s /\v//g<left><left><left>
 
 " Make sure that enter is never overriden in the quickfix window
-autocmd! BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+augroup qfgr
+    autocmd!
+    autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+augroup END
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 nmap <leader>mj mz:m+<cr>`z
@@ -414,7 +416,7 @@ cnoremap <C-E>	<End>
 cnoremap $h e ~/
 cnoremap $d e ~/Desktop/
 cnoremap $j e ./
-cnoremap $c e <C-\>eCurrentFileDir("e")<cr>
+cnoremap $c e <C-\>eCurrentFileDir('e')<cr>
 
 " -> Grep and Vimgrep searching and cope displaying
 
@@ -450,11 +452,11 @@ map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Status line: my initial configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 " Always show the status line
 " set laststatus=2
 "
@@ -518,17 +520,17 @@ map <leader>s? z=
 " hi User8 ctermfg=007 ctermbg=yellow guibg=#af8700 guifg=#444444
 "
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
+    let l:currentBufNum = bufnr('%')
+    let l:alternateBufNum = bufnr('#')
 
     if buflisted(l:alternateBufNum)
         buffer #
@@ -536,12 +538,12 @@ function! <SID>BufcloseCloseIt()
         bnext
     endif
 
-    if bufnr("%") == l:currentBufNum
+    if bufnr('%') ==# l:currentBufNum
         new
     endif
 
     if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
+        execute('bdelete! '.l:currentBufNum)
     endif
 endfunction
 
@@ -554,29 +556,29 @@ function! HasPaste()
 endfunction
 
 function! CmdLine(str)
-    call feedkeys(":" . a:str)
+    call feedkeys(':' . a:str)
 endfunction
 
 " Delete trailing white space on save, useful for some filetypes ;)
-fun! CleanExtraSpaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    :silent! %s/\s\+$//g
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
-endfun
+"fun! CleanExtraSpaces()
+"    let save_cursor = getpos('.')
+"    let old_query = getreg('/')
+"    :silent! %s/\s\+$//g
+"    call setpos('.', save_cursor)
+"    call setreg('/', old_query)
+"endfun
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
-    execute "normal! vgvy"
+    execute 'normal! vgvy'
 
     let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    let l:pattern = substitute(l:pattern, "\n$", '', '')
 
-    if a:direction == 'gv'
+    if a:direction ==# 'gv'
         call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction ==# 'replace'
+        call CmdLine('%s' . '/'. l:pattern . '/')
     endif
 
     let @/ = l:pattern
@@ -589,23 +591,23 @@ endfunction
 
 function! StatuslineGit()
     let l:branchname = GitBranch()
-    return strlen(l:branchname) > 0?'  '.l:branchname.' ':""
+    return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 endfunction
 
 func! DeleteTillSlash()
     let g:cmd = getcmdline()
 
-    if has("win16") || has("win32")
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+    if has('win16') || has('win32')
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", '')
     else
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", '')
     endif
 
-    if g:cmd == g:cmd_edited
-        if has("win16") || has("win32")
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+    if g:cmd ==# g:cmd_edited
+        if has('win16') || has('win32')
+            let g:cmd_edited = substitute(g:cmd, '\\(.*\[\\\\\]\\).*\[\\\\\]', '\\1', '')
         else
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+            let g:cmd_edited = substitute(g:cmd, '\\(.*\[/\]\\).*/', '\\1', '')
         endif
     endif
 
@@ -613,14 +615,18 @@ func! DeleteTillSlash()
 endfunc
 
 func! CurrentFileDir(cmd)
-    return a:cmd . " " . expand("%:p:h") . "/"
+    return a:cmd . ' ' . expand('%:p:h') . '/'
 endfunc
 
 " Don't close window, when deleting a buffer
-autocmd! BufDelete call <SID>BufcloseCloseIt()
+augroup Dontclose
+    autocmd!
+    autocmd BufDelete call <SID>BufcloseCloseIt()
+augroup END
+
 function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
+    let l:currentBufNum = bufnr('%')
+    let l:alternateBufNum = bufnr('#')
 
     if buflisted(l:alternateBufNum)
         buffer #
@@ -628,20 +634,20 @@ function! <SID>BufcloseCloseIt()
         bnext
     endif
 
-    if bufnr("%") == l:currentBufNum
+    if bufnr('%') ==# l:currentBufNum
         new
     endif
 
     if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
+        execute('bdelete! '.l:currentBufNum)
     endif
 endfunction
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Development tools
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 " -> Create/ update tag files
 augroup Tagging
     autocmd! BufWritePost
@@ -649,11 +655,11 @@ augroup Tagging
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   => Compilation with F5
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 "
 "   Following file contains the commands on how to run the currently open code.
 "   The default mapping is set to F5 like most code editors.
@@ -671,7 +677,7 @@ augroup END
 "   way it is done in each case. Take care to add tabbed spaces after each
 "   elseif block (similar to python). For example:
 "
-"   elseif &filetype == '<your_file_extension>'
+"   elseif &filetype ==# '<your_file_extension>'
 "       exec '!<your_compiler> %'
 "
 "   NOTE: The '%' sign indicates the name of the currently open file with extension.
@@ -691,46 +697,46 @@ vmap <F8> <Esc>:call Build()<CR>
 
 func! CompileRun()
     write
-    if &filetype == 'c'
+    if &filetype ==# 'c'
         set makeprg=make\ %<.o
         make
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
+        exec '!time ./%<'
+    elseif &filetype ==# 'cpp'
         set makeprg=make\ %<.o
         make
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %"
-    elseif &filetype == 'sh'
-        exec "!time bash %"
-    elseif &filetype == 'python'
-        exec "terminal time python3 %"
+        exec '!time ./%<'
+    elseif &filetype ==# 'java'
+        exec '!javac %'
+        exec '!time java %'
+    elseif &filetype ==# 'sh'
+        exec '!time bash %'
+    elseif &filetype ==# 'python'
+        exec 'terminal time python3 %'
         normal! a
-    elseif &filetype == 'html'
-        exec "!google-chrome % &"
-    elseif &filetype == 'go'
-        exec "!go build %<"
-        exec "!time go run %"
-    elseif &filetype == 'matlab'
-        exec "!time octave %"
+    elseif &filetype ==# 'html'
+        exec '!google-chrome % &'
+    elseif &filetype ==# 'go'
+        exec '!go build %<'
+        exec '!time go run %'
+    elseif &filetype ==# 'matlab'
+        exec '!time octave %'
     endif
 endfunc
 
 func! Build()
-    if !exists("current_compiler")
-        if (&filetype == 'c')
-            let current_compiler = "gcc"
+    if !exists('current_compiler')
+        if (&filetype ==# 'c')
+            let current_compiler = 'gcc'
             set makeprg=make\ %<.o
-        elseif (&filetype == 'cpp')
-            let current_compiler = "g++"
+        elseif (&filetype ==# 'cpp')
+            let current_compiler = 'g++'
             set makeprg=make\ %<.o
-        elseif &filetype == 'python'
-            let current_compiler = "python"
+        elseif &filetype ==# 'python'
+            let current_compiler = 'python'
             compiler pyunit
             set makeprg=python3\ %
-        elseif &filetype == 'sh'
-            let current_complier = "shellcheck"
+        elseif &filetype ==# 'sh'
+            let current_complier = 'shellcheck'
             set makeprg=shellcheck\ -f\ gcc\ %
             set errorformat=%f:%l:%c:\ %trror:\ %m\ [SC%n],
                \%f:%l:%c:\ %tarning:\ %m\ [SC%n],
@@ -745,11 +751,11 @@ func! Build()
 
 endfunction
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"}}}
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 " => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""{{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
 " -> Commenting
 " For specific file types
 "  :autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
@@ -770,10 +776,10 @@ augroup END
 
 "-> Trailing spaces
 " Delete trailing spaces for certain file types
-augroup CleanSpace
-    autocmd!
-    autocmd BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
-augroup END
+" augroup CleanSpace
+"     autocmd!
+"     autocmd BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
+" augroup END
 " ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
 "                \*.cs, *.dat,*.h, *.md
 
@@ -784,7 +790,7 @@ map <leader>q :e ~/buffer<cr>
 " Return to last edit position when opening files (You want this!)
 augroup LastPosition
     au! BufReadPost
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    au BufReadPost * if line("'\'") > 1 && line("'\'") <= line("$") | exe "normal! g'\'" | endif
 augroup END
 nohlsearch
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}

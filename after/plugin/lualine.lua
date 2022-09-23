@@ -16,7 +16,7 @@ local colors = {
     violet   = '#a9a1e1',
     magenta  = '#c678dd',
     blue     = '#51afef',
-    gray     = 'gray',
+    gray     = 'Gray',
     red      = '#ec5f67',
 }
 
@@ -225,10 +225,10 @@ ins_right {
 }
 
 local lin = '%L'
-lin2 = string.format("[%s]", lin)
+Lin2 = string.format("[%s]", lin)
 
 ins_right {
-    'lin2',
+    'Lin2',
     color = { bg = colors.blue, fg = 'darkblue' },
 }
 
