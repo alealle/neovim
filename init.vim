@@ -790,7 +790,7 @@ map <leader>q :e ~/buffer<cr>
 " Return to last edit position when opening files (You want this!)
 augroup LastPosition
     au! BufReadPost
-    au BufReadPost * if line("'\'") > 1 && line("'\'") <= line("$") | exe "normal! g'\'" | endif
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 augroup END
 nohlsearch
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}
