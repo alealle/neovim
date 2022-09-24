@@ -1,14 +1,6 @@
-plugins/nerdtree/
-plugins/vim-surround/
+myVIM.log
 undo-dir/*
 undo-dir/%Users%alessandroalle%.config%nvim%.gitignore
 undo-dir/%Users%alessandroalle%.config%nvim%test.txt
-plugins/NeoSolarized/
-plugins/gruvbox/
-plugins/plenary.nvim/
-plugins/telescope.nvim/
-plugins/vim-fugitive/
-autoload
 colors/
-plugins/vim-sensible/
 .DS_STORE

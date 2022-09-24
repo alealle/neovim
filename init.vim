@@ -54,15 +54,21 @@ call plug#begin()
     Plug 'hrsh7th/cmp-cmdline'
     Plug 'hrsh7th/nvim-cmp'
     " Ultisnip: Track the engine.
-    Plug 'SirVer/ultisnips'
+    " Plug 'SirVer/ultisnips'
     " Ultisnip: Snippets are separated from the engine. Add this if you want them:
-    Plug 'honza/vim-snippets'
+    " Plug 'honza/vim-snippets'
+    Plug 'L3MON4D3/LuaSnip'
+    Plug 'saadparwaiz1/cmp_luasnip'
+    Plug 'rafamadriz/friendly-snippets'
     Plug 'jose-elias-alvarez/null-ls.nvim'
+    Plug 'williamboman/mason.nvim'
+    Plug 'williamboman/mason-lspconfig.nvim'
     Plug 'nvim-lualine/lualine.nvim'
     Plug 'kyazdani42/nvim-tree.lua'
     Plug 'kyazdani42/nvim-web-devicons'
     Plug 'vim-scripts/indentpython.vim'
     Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
+    Plug 'windwp/nvim-ts-autotag'
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 call plug#end()
