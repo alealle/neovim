@@ -566,13 +566,13 @@ function! CmdLine(str)
 endfunction
 
 " Delete trailing white space on save, useful for some filetypes ;)
-"fun! CleanExtraSpaces()
-"    let save_cursor = getpos('.')
-"    let old_query = getreg('/')
-"    :silent! %s/\s\+$//g
-"    call setpos('.', save_cursor)
-"    call setreg('/', old_query)
-"endfun
+function! CleanExtraSpaces()
+    let save_cursor = getpos('.')
+    let old_query = getreg('/')
+    :silent! %s/\s\+$//g
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+endfun
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -781,11 +781,11 @@ augroup file_all
 augroup END
 
 "-> Trailing spaces
-" Delete trailing spaces for certain file types
-" augroup CleanSpace
-"     autocmd!
-"     autocmd BufWritePre *.txt,*.js,*.py,*.c,*.cpp,*.cs,*.h,*.md,*.vim : call CleanExtraSpaces()
-" augroup END
+ " Delete trailing spaces for certain file types
+ augroup CleanSpace
+     autocmd!
+     autocmd BufWritePre *.txt,*.dat,*.lua,*.vim : call CleanExtraSpaces()
+ augroup END
 " ,*.js,*.py,*.wiki,*.sh,*.coffee,*.vim,*.c,*.cpp,
 "                \*.cs, *.dat,*.h, *.md
 
@@ -799,4 +799,5 @@ augroup LastPosition
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 augroup END
 nohlsearch
+set spell
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}
