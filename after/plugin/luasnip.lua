@@ -4,10 +4,20 @@ if not pcall(require, "luasnip") then
 end
 
 local ls = require("luasnip")
+local s = ls.snippet
+local t = ls.text_node
 
--- <c-k> is my expansion key
--- this will expand the current item or jump to the next item within the snippet.
-vim.api.nvim_command('echomsg "fund"')
+ls.config.set_config({
+	-- Enable autosnippet
+	enable_autosnippets = true,
+	history = true,
+
+	-- Enable dynamic update of snippets during typing
+	updateedevents = "TextChanged, TextChangedI",
+	-- <c-k> is my expansion key
+	-- this will expand the current item or jump to the next item within the snippet.
+})
+
 vim.keymap.set({ "i", "s" }, "<c-k>", function()
 	if ls.expand_or_jumpable() then
 		ls.expand_or_jump()
@@ -21,3 +31,13 @@ vim.keymap.set({ "i", "s" }, "<c-j>", function()
 		ls.jump(-1)
 	end
 end, { silent = true })
+
+vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>")
+
+-- load test snippet for all files
+ls.add_snippets("all", {
+	s("aal", { t("Alessandro Alle") }),
+})
+
+-- Load snippets using lua format
+require("luasnip.loaders.from_lua").load()

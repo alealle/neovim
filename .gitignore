@@ -4,3 +4,4 @@ undo-dir/%Users%alessandroalle%.config%nvim%.gitignore
 undo-dir/%Users%alessandroalle%.config%nvim%test.txt
 colors/
 .DS_STORE
+luasnippets
