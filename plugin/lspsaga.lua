@@ -1,10 +1,9 @@
 local keymap = vim.keymap.set
-local saga = require('lspsaga')
+local saga = require("lspsaga")
 
-saga.init_lsp_saga
-{
-    border_style = "rounded"
-}
+saga.init_lsp_saga({
+    border_style = "rounded",
+})
 
 -- Lsp finder find the symbol definition implement reference
 -- if there is no implement it will hide

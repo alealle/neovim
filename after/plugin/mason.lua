@@ -10,5 +10,24 @@ end
 mason.setup({})
 
 lspconfig.setup({
-    ensure_installed = { "sumneko_lua", "tailwindcss" },
+    ensure_installed = {
+        "arduino_language_server",
+        "autopep8",
+        "bashls",
+        "black",
+        "clangd",
+        "cmake",
+        "eslint_d",
+        "flake_8",
+        "jdtls",
+        "quick_lint_js",
+        "prettier",
+        "prettierd",
+        "pyright",
+        "sumneko_lua",
+        "sqlls",
+        "tailwindcss",
+        "tsserver",
+        "vimls",
+    },
 })
