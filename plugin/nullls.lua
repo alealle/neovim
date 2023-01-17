@@ -46,7 +46,7 @@ null_ls.setup({
             vim.api.nvim_command([[augroup Format]])
             vim.api.nvim_command([[autocmd! * <buffer>]])
             vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
-                                vim.lsp.buf.formatting_seq_sync()]])
+                                vim.lsp.buf.format()]])
             vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "nullls formatted"]])
             vim.api.nvim_command([[augroup END]])
         else

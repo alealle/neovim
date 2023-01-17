@@ -44,7 +44,7 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_command([[augroup Formatc]])
         vim.api.nvim_command([[autocmd! * <buffer>]])
         vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
-	                             vim.lsp.buf.formatting_seq_sync()]])
+	                             vim.lsp.buf.format()]])
         vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "formatted!!"]])
         vim.api.nvim_command([[augroup END]])
     else

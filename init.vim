@@ -247,6 +247,7 @@ try
 catch
 endtry
 
+
 " :> Tabs
 " Useful mappings for managing tabs
 noremap <leader>tn :tabnew<cr>
