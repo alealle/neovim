@@ -182,7 +182,7 @@ catch /Cannot open/
 endtry
 
 " Writes buffer when new buffer opened and in other cases
-" where some distration may result in data loss - seen
+" where some distraction may result in data loss - seen
 set autowrite
 
 " -> Text, tab and indent related
