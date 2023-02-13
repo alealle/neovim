@@ -24,7 +24,7 @@ lspconfig.setup({
         --"prettier",
         "pyright",
         --"prettierd",
-        "sumneko_lua",
+        "lua_ls",
         "sqlls",
         "tailwindcss",
         "tsserver",

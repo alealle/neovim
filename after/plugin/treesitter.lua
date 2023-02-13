@@ -13,6 +13,7 @@ ts.setup({
         disable = { "c", "cpp" },
     },
     ensure_installed = {
+        "python",
         "bash",
         "c",
         "cpp",

@@ -1,21 +1,21 @@
 -- import lspsaga safely
 local saga_status, saga = pcall(require, "lspsaga")
 if not saga_status then
-    return
+	return
 end
 
 saga.setup({
-    -- keybinds for navigation in lspsaga window
-    scroll_preview = { scroll_down = "<C-f>", scroll_up = "<C-b>" },
-    -- use enter to open file with definition preview
-    definition = {
-        edit = "<CR>",
-    },
-    ui = {
-        colors = {
-            normal_bg = "#022746",
-        },
-    },
+	-- keybinds for navigation in lspsaga window
+	scroll_preview = { scroll_down = "<C-f>", scroll_up = "<C-b>" },
+	-- use enter to open file with definition preview
+	definition = {
+		edit = "<CR>",
+	},
+	ui = {
+		colors = {
+			normal_bg = "#022746",
+		},
+	},
 })
 
 local keymap = vim.keymap.set
@@ -41,7 +41,10 @@ keymap("n", "<leader>d", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 -- -- Show line diagnostics
 keymap("n", "<leader>a", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
 --
--- -- Show cursor diagnostic
+--- Show buffer diagnostics
+keymap("n", "<leader>ab", "<cmd>Lspsaga show_buf_diagnostics<CR>")
+
+-- Show cursor diagnostic
 keymap("n", "<leader>A", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { silent = true })
 
 -- Diagnsotic jump can use `<c-o>` to jump back
@@ -50,10 +53,10 @@ keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true })
 --
 -- Only jump to error
 keymap("n", "[E", function()
-    require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+	require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 keymap("n", "]E", function()
-    require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+	require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 --
 -- Outline
