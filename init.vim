@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author:
 "       Alessandro Alle
 "
@@ -27,6 +27,10 @@
 "    => Misc
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Encoding
+set encoding=utf-8
+scriptencoding
+
 " With a map leader it's possible to do extra key combinations
 let mapleader = ','
 
@@ -161,9 +165,6 @@ augroup InsertLine
 augroup END
 
 " -> Files, backups and undo
-
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
 
 " Use Unix as the standard file type
 set fileformats=unix,dos,mac
