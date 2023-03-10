@@ -41,4 +41,11 @@ return require("packer").startup(function(use)
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons" },
 	})
+    use( "ray-x/lsp_signature.nvim")
+    use({
+    "ThePrimeagen/refactoring.nvim",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter" },
+    })
 end)

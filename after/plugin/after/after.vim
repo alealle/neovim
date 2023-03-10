@@ -10,4 +10,4 @@
 
 " Disable comment sign insertion in a new line after C-r in a comment line
 set formatoptions=jcql
-echom 'carregado'
+" echom 'carregado'

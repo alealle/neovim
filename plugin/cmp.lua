@@ -105,7 +105,7 @@ cmp.setup({
 			select = true,
 		}),
 
-		-- If you want tab completion :'(
+		-- If you want tab completion :'
 		--  First you have to just promise to read `:help ins-completion`.
 		--
 		-- ["<Tab>"] = function(fallback)
@@ -144,8 +144,17 @@ cmp.setup({
 		{ name = "luasnip", option = { use_show_condition = false }, keyword_length = 2 }, -- For luasnip users.
 		-- { name = "ultisnips" }, -- For ultisnips users.
 		-- { name = 'snippy' }, -- For snippy users.
-		{ name = "buffer", keyword_length = 5 },
+		{ name = "buffer",
+          option = {
+                    get_bufnrs = function()
+                                   return vim.api.nvim_list_bufs()
+                                   end
+                   },
+         keyword_length = 5 },
 	}),
+    experimental = {
+        ghost_text = true,
+    },
 })
 
 -- Set configuration for specific filetype.
@@ -168,6 +177,13 @@ cmp.setup.cmdline("/", {
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline({
+        -- ['<CR>'] = function(fallback)
+        --                     if cmp.visible() then
+        --                         cmp.confirm()
+        --                     else
+        --                         fallback() -- If you use vim-endwise, this fallback will behave the same as vim-endwise.
+        --                     end
+        --             end,
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-e>"] = cmp.mapping.close(),

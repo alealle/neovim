@@ -63,6 +63,14 @@ require("lspconfig").clangd.setup({
 require("lspconfig").pyright.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
+    settings = {
+     python = {
+       analysis = {
+         autoSearchPaths = true;
+         useLibraryCodeForTypes = true;
+       };
+     };
+   };
 })
 
 -- Neovim: no requirements
@@ -84,6 +92,9 @@ require("lspconfig").lua_ls.setup({
 	flags = lsp_flags,
 	settings = {
 		Lua = {
+            completion = {
+                callSnippet = 'Replace',
+            },
 			runtime = {
 				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
 				version = "LuaJIT",

@@ -10,24 +10,30 @@ null_ls.setup({
 		-- Code action
 		null_ls.builtins.code_actions.eslint_d,
 		null_ls.builtins.code_actions.shellcheck,
+        -- Filetypes: { "go", "javascript", "lua", "python", "typescript" }
+        null_ls.builtins.code_actions.refactoring,
 		----------------------------------------------------------------------
 		-- Diagnostics
 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
 		null_ls.builtins.diagnostics.eslint_d,
 		-- Filetypes: { "python" }
 		null_ls.builtins.diagnostics.flake8,
+        -- Filetypes: {"sh"}
 		null_ls.builtins.diagnostics.shellcheck,
-		null_ls.builtins.diagnostics.vint,
-		-- stylelint runs only in the command line; could not integrate with nvim
-		--- null_ls.builtins.diagnostics.stylelint,
+		-- Filetypes: {"vim"}
+        null_ls.builtins.diagnostics.vint,
+        -- Filetypes: { "scss", "less", "css", "sass" }
+		null_ls.builtins.diagnostics.stylelint,
+        -- Filetypes: { "html", "xml" }
+        null_ls.builtins.diagnostics.tidy,
 		----------------------------------------------------------------------
 		--Formatting
-		null_ls.builtins.formatting.autopep8,
+		-- null_ls.builtins.formatting.autopep8,
 		null_ls.builtins.formatting.beautysh.with({
 			filetypes = { "bash", "sh", "zsh" }, -- change to your dialect
 		}),
-		-- null_ls.builtins.formatting.uncrustify,
-		--null_ls.builtins.formatting.black,
+		null_ls.builtins.formatting.uncrustify,
+		null_ls.builtins.formatting.black,
 		--null_ls.builtins.formatting.csharpier,
 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
 		null_ls.builtins.formatting.eslint_d,

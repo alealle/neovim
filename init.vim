@@ -617,6 +617,8 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Development tools
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
+" -> Set tags
+set tags=/Users/alessandroalle/Computing/tags,./tags,./../tags
 " -> Create/ update tag files
 augroup Tagging
     autocmd! BufWritePost
