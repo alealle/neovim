@@ -38,25 +38,31 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
 	vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
 	vim.keymap.set("n", "<space>gr", vim.lsp.buf.references, bufopts)
-	vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
-	--  Format on save: disabled -> moved to null-ls (except .c, .cpp)
-	if client.server_capabilities.document_formatting then
-		vim.api.nvim_command([[augroup Formatc]])
-		vim.api.nvim_command([[autocmd! * <buffer>]])
-		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
-	                             vim.lsp.buf.format()]])
-		vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "formatted!!"]])
-		vim.api.nvim_command([[augroup END]])
-	else
-		vim.api.nvim_command([[echom "client's does not support formatting"]])
-	end
-	vim.api.nvim_command([[echom "LSP attached"]])
+	vim.keymap.set("n", "<space>f", vim.lsp.buf.format, bufopts)
+    -- (10/03/2023) Format on save moved to formatting.lua
+	--  (2022) Format on save: disabled -> moved to null-ls (except .c, .cpp)
+-- 	if client.server_capabilities.document_formatting then
+-- 		vim.api.nvim_command([[augroup Formatc]])
+-- 		vim.api.nvim_command([[autocmd! * <buffer>]])
+-- 		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
+-- 	                             vim.lsp.buf.format()]])
+-- 		vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "formatted!!"]])
+-- 		vim.api.nvim_command([[augroup END]])
+-- 	else
+-- 		vim.api.nvim_command([[echom "client's does not support formatting"]])
+-- 	end
+-- 	vim.api.nvim_command([[echom "LSP attached"]])
 end
 
 -- Clangd:
+-- fix to get rid of warning for conflict with nullls: multiple enconding
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/428
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.offsetEncoding = { "utf-16" }
 require("lspconfig").clangd.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
+    capabilities = capabilities,
 })
 
 -- Python:

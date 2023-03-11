@@ -16,7 +16,7 @@ null_ls.setup({
 		-- Diagnostics
 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
 		null_ls.builtins.diagnostics.eslint_d,
-		-- Filetypes: { "python" }
+		-- Filetypes: { "python" } -- eliminating redundancy because lspconfig has pyright
 		null_ls.builtins.diagnostics.flake8,
         -- Filetypes: {"sh"}
 		null_ls.builtins.diagnostics.shellcheck,
@@ -46,18 +46,19 @@ null_ls.setup({
 		}),
 		null_ls.builtins.formatting.stylua,
 	},
-	on_attach = function(client, bufnr)
-		--  Code moved from lspconfig.lua
-		if client.server_capabilities.document_formatting then
-			vim.api.nvim_command([[augroup Format]])
-			vim.api.nvim_command([[autocmd! * <buffer>]])
-			vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
-                                vim.lsp.buf.format()]])
-			vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "nullls formatted"]])
-			vim.api.nvim_command([[augroup END]])
-		else
-			vim.api.nvim_command([[echom "Nulls client's does not support formatting"]])
-		end
-		vim.api.nvim_command([[echom "Null-ls attached"]])
-	end,
+-- on_attach warnings removed after I got to know that NulllsInfo does it
+-- 	on_attach = function(client, bufnr)
+-- 		--  Code moved from lspconfig.lua
+-- 		if client.server_capabilities.document_formatting then
+-- 			vim.api.nvim_command([[augroup Format]])
+-- 			vim.api.nvim_command([[autocmd! * <buffer>]])
+-- 			vim.api.nvim_command([[autocmd BufWritePre <buffer> lua
+--                                 vim.lsp.buf.format()]])
+-- 			vim.api.nvim_command([[autocmd BufWritePre <buffer> echom "nullls formatted"]])
+-- 			vim.api.nvim_command([[augroup END]])
+-- 		else
+-- 			vim.api.nvim_command([[echom "Nulls client's does not support formatting"]])
+-- 		end
+-- 		vim.api.nvim_command([[echom "Null-ls attached"]])
+-- 	end,
 })
