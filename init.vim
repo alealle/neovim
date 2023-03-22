@@ -150,6 +150,8 @@ if exists('&termguicolors') && exists('&winblend')
 endif
 
 " Use gruvbox colors
+" Others: tokyonight, neosolarized, mac_classic, parchment, PaperColor
+" colorscheme neosolarized
 colorscheme gruvbox
 set background=dark
 
@@ -313,7 +315,7 @@ vmap <leader>mk :m'<-2<cr>`>my`<mzgv`yo`z
 
 " Or, simpler shortcuts:
 nnoremap - ddp
-nnoremap _ dd2kp
+nnoremap _ ddkP
 
 " Insert date
 noremap <leader>D :put =strftime('%Y-%m-%d %H:%M:%S%z')

@@ -17,7 +17,7 @@ null_ls.setup({
 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
 		null_ls.builtins.diagnostics.eslint_d,
 		-- Filetypes: { "python" } -- eliminating redundancy because lspconfig has pyright
-		null_ls.builtins.diagnostics.flake8,
+		-- null_ls.builtins.diagnostics.flake8,
         -- Filetypes: {"sh"}
 		null_ls.builtins.diagnostics.shellcheck,
 		-- Filetypes: {"vim"}
