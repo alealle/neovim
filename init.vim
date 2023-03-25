@@ -150,7 +150,7 @@ if exists('&termguicolors') && exists('&winblend')
 endif
 
 " Use gruvbox colors
-" Others: tokyonight, neosolarized, mac_classic, parchment, PaperColor
+" Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
 " colorscheme neosolarized
 colorscheme gruvbox
 set background=dark
