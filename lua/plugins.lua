@@ -47,5 +47,7 @@ return require("packer").startup(function(use)
         requires = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter" },
+    -- colorscheme vscode
+    use("Mofiqul/vscode.nvim")
     })
 end)
