@@ -153,8 +153,8 @@ endif
 " Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
 " colorscheme neosolarized
 colorscheme gruvbox
-set background=light
-"lua require('vscode').load('light')
+set background=dark
+" lua require('vscode').load('light')
 
 "' Set cursor to bar in insert mode
 let &t_SI="\e[6 q"
