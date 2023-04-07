@@ -203,7 +203,7 @@ Cwd = string.format('cwd: %s', cwd_aux)
 ins_right {
     'Cwd',
     cond = conditions.buffer_not_empty,
-    color = { bg = colors.gray },
+    color = { fg = colors.green },
 }
 
 ins_right {
