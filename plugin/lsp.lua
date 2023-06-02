@@ -280,25 +280,7 @@ mylspconfig.tailwindcss.setup({
 -- SQL
 mylspconfig.sqlls.setup({})
 
--- > mason-null-ls
-mason_null_ls.setup({
-	ensure_installed = {
-		-- Opt to list sources here, when available in mason.
-		-- .sh
-		"beautish",
-		-- "black",
-		"eslint_d",
-		-- .sh
-		"shellcheck",
-		--"sqlfluff",
-		"stylelua",
-		"stylelint",
-	},
-	automatic_installation = false,
-	handlers = {},
-})
-
--- :> null-ls: anything not supported by mason
+-- :> null-ls: first source of truth
 
 null_ls.setup({
 	sources = {
@@ -365,3 +347,23 @@ null_ls.setup({
 	--        vim.api.nvim_command([[echom "Null-ls attached"]])
 	--    end,
 })
+
+-- > mason-null-ls
+mason_null_ls.setup({
+	ensure_installed = {
+		-- Opt to list sources here, when available in mason.
+		-- .sh
+		"beautish",
+		-- "black",
+		"eslint_d",
+		-- .sh
+		"shellcheck",
+		--"sqlfluff",
+		"stylelua",
+		"stylelint",
+	},
+	automatic_installation = false,
+	handlers = {},
+})
+
+
