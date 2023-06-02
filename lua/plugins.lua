@@ -30,9 +30,9 @@ return require("packer").startup(function(use)
     -- use LSPSaga for improving LSP experience
     use({
         "glepnir/lspsaga.nvim",
-        opt = true,
-        branch = "main",
-        event = "LspAttach",
+        -- opt = true,
+        -- branch = "main",
+        -- event = "LspAttach",
         requires = {
             { "nvim-tree/nvim-web-devicons" },
             --Please make sure you install markdown and markdown_inline parser
