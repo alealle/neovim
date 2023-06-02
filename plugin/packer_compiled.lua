@@ -124,10 +124,17 @@ _G.packer_plugins = {
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/indentpython.vim",
     url = "https://github.com/vim-scripts/indentpython.vim"
   },
-  ["lspsaga.nvim"] = {
-    config = { "\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\flspsaga\frequire\0" },
+  ["lsp_signature.nvim"] = {
     loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim",
+    url = "https://github.com/ray-x/lsp_signature.nvim"
+  },
+  ["lspsaga.nvim"] = {
+    after = { "nvim-web-devicons" },
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/opt/lspsaga.nvim",
     url = "https://github.com/glepnir/lspsaga.nvim"
   },
   ["lualine.nvim"] = {
@@ -139,6 +146,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim",
     url = "https://github.com/williamboman/mason-lspconfig.nvim"
+  },
+  ["mason-null-ls.nvim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/mason-null-ls.nvim",
+    url = "https://github.com/jay-babu/mason-null-ls.nvim"
   },
   ["mason.nvim"] = {
     loaded = true,
@@ -180,15 +192,19 @@ _G.packer_plugins = {
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-ts-autotag",
     url = "https://github.com/windwp/nvim-ts-autotag"
   },
-  ["nvim-ts-rainbow"] = {
+  ["nvim-ts-rainbow2"] = {
     loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-ts-rainbow",
-    url = "https://github.com/p00f/nvim-ts-rainbow"
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-ts-rainbow2",
+    url = "https://github.com/HiPhish/nvim-ts-rainbow2"
   },
   ["nvim-web-devicons"] = {
-    loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
-    url = "https://github.com/kyazdani42/nvim-web-devicons"
+    load_after = {
+      ["lspsaga.nvim"] = true
+    },
+    loaded = false,
+    needs_bufread = false,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
@@ -199,6 +215,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
+  },
+  ["refactoring.nvim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/refactoring.nvim",
+    url = "https://github.com/ThePrimeagen/refactoring.nvim"
   },
   ["telescope.nvim"] = {
     loaded = true,
@@ -219,14 +240,22 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/vim-surround",
     url = "https://github.com/tpope/vim-surround"
+  },
+  ["vscode.nvim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/vscode.nvim",
+    url = "https://github.com/Mofiqul/vscode.nvim"
   }
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: lspsaga.nvim
-time([[Config for lspsaga.nvim]], true)
-try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\flspsaga\frequire\0", "config", "lspsaga.nvim")
-time([[Config for lspsaga.nvim]], false)
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Event lazy-loads
+time([[Defining lazy-load event autocommands]], true)
+vim.cmd [[au LspAttach * ++once lua require("packer.load")({'lspsaga.nvim'}, { event = "LspAttach *" }, _G.packer_plugins)]]
+time([[Defining lazy-load event autocommands]], false)
+vim.cmd("augroup END")
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

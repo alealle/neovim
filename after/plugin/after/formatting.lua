@@ -8,13 +8,14 @@ api.nvim_create_autocmd("BufWritePre", {
         "*.html", "*.css", "*.xml",
         "*.sh", "*.zsh", "*.bash",
         "*.ts", "*.ns", "*.json", "*.js", "*.yaml",
+        "*.sql"
     },
     callback =function ()
         -- 10/03/2023 removing schedule so that does not print the msg to terminal
-        -- vim.schedule(function ()
+        vim.schedule(function ()
             vim.lsp.buf.format()
             print("File formatted")
-    --    end)
+        end)
     end,
     group = FormatGroupId,
 })

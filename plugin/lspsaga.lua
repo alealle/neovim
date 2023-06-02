@@ -4,20 +4,6 @@ if not saga_status then
 	return
 end
 
-saga.setup({
-	-- keybinds for navigation in lspsaga window
-	scroll_preview = { scroll_down = "<C-f>", scroll_up = "<C-b>" },
-	-- use enter to open file with definition preview
-	definition = {
-		edit = "<CR>",
-	},
-	ui = {
-		colors = {
-			normal_bg = "#022746",
-		},
-	},
-})
-
 local keymap = vim.keymap.set
 --
 -- -- Lsp finder find the symbol definition implement reference
@@ -63,10 +49,10 @@ end, { silent = true })
 keymap("n", "<leader>o", "<cmd>Lspsaga outline<CR>")
 --
 -- -- Hover Doc
--- keymap("n", "<leader>h", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+keymap("n", "<leader>h", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
 --
 -- Float terminal
---keymap("n", "<leader>i", "<cmd>Lspsaga open_floaterm<CR>", { silent = true })
+-- keymap("n", "<leader>i", "<cmd>Lspsaga open_floaterm<CR>", { silent = true })
 -- if you want pass somc cli command into terminal you can do like this
 -- open lazygit in lspsaga float terminal
 -- keymap("n", "<leader>I", "<cmd>Lspsaga open_floaterm lazygit<CR>", { silent = true })

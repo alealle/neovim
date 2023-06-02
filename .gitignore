@@ -6,3 +6,4 @@ colors/
 .DS_STORE
 luasnippets
 after/plugin/tags
+oldlsp/*

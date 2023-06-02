@@ -296,3 +296,6 @@ require("lspconfig")["tsserver"].setup({
 require("lspconfig")["tailwindcss"].setup({
 	capabilities = capabilities,
 })
+require("lspconfig")["sqlls"].setup({
+	capabilities = capabilities,
+})
