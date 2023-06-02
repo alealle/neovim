@@ -1,8 +1,16 @@
 -- import lspsaga safely
-local saga_status, saga = pcall(require, "lspsaga")
-if not saga_status then
-	return
-end
+local status, saga = pcall(require, "lspsaga")
+if (not status) then return end
+
+saga.setup({
+  ui = {
+    winblend = 10,
+    border = 'rounded',
+    colors = {
+      normal_bg = '#002b36'
+    }
+  },
+})
 
 local keymap = vim.keymap.set
 --
@@ -39,10 +47,10 @@ keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true })
 --
 -- Only jump to error
 keymap("n", "[E", function()
-	require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+    require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 keymap("n", "]E", function()
-	require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+    require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 --
 -- Outline

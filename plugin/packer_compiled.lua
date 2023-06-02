@@ -82,7 +82,7 @@ _G.packer_plugins = {
   black = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/black",
-    url = "https://github.com/python/black"
+    url = "https://github.com/psf/black"
   },
   ["bufferline.nvim"] = {
     loaded = true,
@@ -114,15 +114,15 @@ _G.packer_plugins = {
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  ["formatter.nvim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/formatter.nvim",
+    url = "https://github.com/mhartington/formatter.nvim"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
-  },
-  ["indentpython.vim"] = {
-    loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/indentpython.vim",
-    url = "https://github.com/vim-scripts/indentpython.vim"
   },
   ["lsp_signature.nvim"] = {
     loaded = true,
@@ -130,11 +130,8 @@ _G.packer_plugins = {
     url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["lspsaga.nvim"] = {
-    after = { "nvim-web-devicons" },
-    loaded = false,
-    needs_bufread = false,
-    only_cond = false,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/opt/lspsaga.nvim",
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
     url = "https://github.com/glepnir/lspsaga.nvim"
   },
   ["lualine.nvim"] = {
@@ -198,12 +195,8 @@ _G.packer_plugins = {
     url = "https://github.com/HiPhish/nvim-ts-rainbow2"
   },
   ["nvim-web-devicons"] = {
-    load_after = {
-      ["lspsaga.nvim"] = true
-    },
-    loaded = false,
-    needs_bufread = false,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
     url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
   ["packer.nvim"] = {
@@ -249,13 +242,6 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
-vim.cmd [[augroup packer_load_aucmds]]
-vim.cmd [[au!]]
-  -- Event lazy-loads
-time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au LspAttach * ++once lua require("packer.load")({'lspsaga.nvim'}, { event = "LspAttach *" }, _G.packer_plugins)]]
-time([[Defining lazy-load event autocommands]], false)
-vim.cmd("augroup END")
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

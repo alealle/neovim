@@ -4,7 +4,7 @@ if not status then
 	return
 end
 
-local status2, lspconfig = pcall(require, "lspconfig")
+local status2, mylspconfig = pcall(require, "lspconfig")
 if not status2 then
 	return
 end
@@ -68,7 +68,7 @@ mason_lspconfig.setup_handlers({
 	-- and will be called for each installed server that doesn't have
 	-- a dedicated handler.
 	function(server_name) -- default handler (optional)
-		require("lspconfig")[server_name].setup({})
+		mylspconfig[server_name].setup({})
 	end,
 	-- Next, you can provide a dedicated handler for specific servers.
 	-- For example, a handler override for the `rust_analyzer`:
@@ -142,14 +142,14 @@ end
 -- autocompletion with YouCompleteMe
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.offsetEncoding = { "utf-16" }
-require("lspconfig").clangd.setup({
+mylspconfig.clangd.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 	capabilities = capabilities,
 })
 
 -- Python:
-require("lspconfig").pyright.setup({
+mylspconfig.pyright.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 	settings = {
@@ -163,20 +163,20 @@ require("lspconfig").pyright.setup({
 })
 
 -- Neovim: no requirements
-require("lspconfig").vimls.setup({
+mylspconfig.vimls.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
 
 --- Bash: no requirements
-require("lspconfig").bashls.setup({
+mylspconfig.bashls.setup({
 	GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh|.zshrc)",
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
 
 -- Lua
-require("lspconfig").lua_ls.setup({
+mylspconfig.lua_ls.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 	settings = {
@@ -206,7 +206,7 @@ require("lspconfig").lua_ls.setup({
 })
 
 -- Typescript:
-require("lspconfig").tsserver.setup({
+mylspconfig.tsserver.setup({
 	on_attach = on_attach,
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
 	flags = lsp_flags,
@@ -214,7 +214,7 @@ require("lspconfig").tsserver.setup({
 })
 
 -- HTML, CSS, Javascript and other languages focused on web development
-require("lspconfig").tailwindcss.setup({
+mylspconfig.tailwindcss.setup({
 	on_attach = on_attach,
 	filetypes = {
 		"aspnetcorerazor",
@@ -278,7 +278,7 @@ require("lspconfig").tailwindcss.setup({
 --require'lspconfig'.unocss.setup{}
 
 -- SQL
-require("lspconfig").sqlls.setup({})
+mylspconfig.sqlls.setup({})
 
 -- > mason-null-ls
 mason_null_ls.setup({
