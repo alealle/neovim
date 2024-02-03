@@ -357,13 +357,11 @@ mason_null_ls.setup({
 	ensure_installed = {
 		-- Opt to list sources here, when available in mason.
 		-- .sh
-		"beautish",
 		-- "black",
 		"eslint_d",
 		-- .sh
 		"shellcheck",
 		--"sqlfluff",
-		"stylelua",
 		"stylelint",
 	},
 	automatic_installation = false,
