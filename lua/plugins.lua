@@ -48,7 +48,6 @@ return require("packer").startup(function(use)
     use("nvim-telescope/telescope.nvim")
     -- Git
     use("tpope/vim-fugitive")
-    use("lewis6991/gitsigns.nvim")
     -- Typing
     use("tpope/vim-surround")
     -- formatting

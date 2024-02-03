@@ -143,8 +143,6 @@ endif
 if exists('&termguicolors') && exists('&winblend')
     " Enable syntax highlighting
     syntax enable
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     set termguicolors
     set winblend=0
     set wildoptions=pum
@@ -153,9 +151,9 @@ endif
 
 " Use gruvbox colors
 " Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
+" colorscheme neosolarized
 colorscheme gruvbox
-" colorscheme tokyonight-day
-set background=light
+set background=dark
 " lua require('vscode').load('light')
 
 "' Set cursor to bar in insert mode
@@ -299,7 +297,6 @@ endwhile
 " Fast saving
 nnoremap <leader>w :w!<cr>
 nnoremap <leader>wa :wa!<cr>
-nnoremap <leader>wq :wq<cr>
 
 "Always perform very magic search
 nnoremap / /\v
