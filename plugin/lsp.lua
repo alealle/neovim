@@ -40,7 +40,7 @@ local DEFAULT_SETTINGS = {
 		"clangd",
 		"cmake",
 		-- "eslint",
-		-- "jdtls",
+		"jdtls",
 		-- "quick_lint_js",
 		--"prettier",
 		"pyright",
@@ -147,6 +147,10 @@ mylspconfig.clangd.setup({
 	flags = lsp_flags,
 	capabilities = capabilities,
 })
+-- Java: jtdls
+mylspconfig.jdtls.setup({
+    on_attach=on_attach,
+    })
 
 -- Python:
 mylspconfig.pyright.setup({
