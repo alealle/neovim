@@ -43,5 +43,6 @@
         "/Users/alessandroalle/.config/nvim/after",
         "${3rd}/luassert/library",
         "/usr/local/Cellar/lua-language-server/3.6.20/libexec/meta/39fa7224"
-    ]
+    ],
+    "diagnostics":{"enable":true,  "globals" : ["vim"]}
 }
