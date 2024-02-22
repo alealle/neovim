@@ -152,6 +152,7 @@ endif
 " Use gruvbox colors
 " Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
 " colorscheme neosolarized
+let g:gruvbox_italic=1
 colorscheme gruvbox
 set background=dark
 " lua require('vscode').load('light')
