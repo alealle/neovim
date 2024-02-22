@@ -6,6 +6,7 @@ api.nvim_create_autocmd("BufWritePre", {
     pattern = { "*.py", "*.pyi",
         "*.cpp", "*.c", "*.h",
         "*.html", "*.css", "*.xml",
+        "*.java",
         "*.sh", "*.zsh", "*.bash",
         "*.ts", "*.ns", "*.json", "*.js", "*.yaml",
         "*.sql"

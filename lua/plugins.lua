@@ -73,6 +73,7 @@ return require("packer").startup(function(use)
         requires = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter" },
-    use({"mtdl9/vim-log-highlighting"})
+    use({"mtdl9/vim-log-highlighting"}),
+    use("lewis6991/gitsigns.nvim")
     })
 end)
