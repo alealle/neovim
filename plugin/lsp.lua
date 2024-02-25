@@ -403,19 +403,19 @@ formatter.setup({
 			end,
 		},
 
-		java = {
-			-- "formatter.filetypes.lua" defines default configurations for the
-			-- "lua" filetype
-			require("formatter.filetypes.java").google_java_format,
-
-			function()
-				-- Full specification of configurations is down below and in Vim help
-				-- files
-				return {
-					stdin = true,
-				}
-			end,
-		},
+		--		java = {
+		--			-- "formatter.filetypes.lua" defines default configurations for the
+		--			-- "lua" filetype
+		--			require("formatter.filetypes.java").google_java_format,
+		--
+		--			function()
+		--				-- Full specification of configurations is down below and in Vim help
+		--				-- files
+		--				return {
+		--					stdin = true,
+		--				}
+		--			end,
+		--		},
 	},
 })
 vim.keymap.set("n", "<leader>=", function()
