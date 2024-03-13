@@ -9,7 +9,8 @@ api.nvim_create_autocmd("BufWritePre", {
         "*.java",
         "*.sh", "*.zsh", "*.bash",
         "*.ts", "*.ns", "*.json", "*.js", "*.yaml",
-        "*.sql"
+        "*.sql",
+        "*.rs"
     },
     callback =function ()
         -- 10/03/2023 removing schedule so that does not print the msg to terminal

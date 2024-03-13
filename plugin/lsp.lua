@@ -39,6 +39,7 @@ local DEFAULT_SETTINGS = {
 	-- This setting has no relation with the `automatic_installation` setting.
 	---@type string[]
 	ensure_installed = {
+        "rust_analyzer",
 		"arduino_language_server",
 		"bashls",
 		"clangd",
@@ -208,7 +209,34 @@ mylspconfig.lua_ls.setup({
 		},
 	},
 })
-
+-- Rust commented to not cause conflicts with rust-tools config
+-- mylspconfig.rust_analyzer.setup({
+-- on_attach = function(client, bufnr)
+--         vim.lsp.inlay_hint.enable(bufnr)
+--     end,
+--     capabilities = capabilities,
+-- filetypes = {"rust"},
+--     root_dir = mylspconfig.util.root_pattern("Cargo.toml"),
+--   settings = {
+--     ["rust_analyzer"] = {
+--             imports = {
+--                 granularity = {
+--                     group = "module",
+--                 },
+--                 prefix = "self",
+--             },
+--             cargo = {
+--                 allFeatures = true,
+--                 buildScripts = {
+--                     enable = true,
+--                 },
+--             },
+--             procMacro = {
+--                 enable = true
+--             },
+--         }
+--     }
+--       })
 -- Typescript:
 mylspconfig.tsserver.setup({
 	on_attach = on_attach,

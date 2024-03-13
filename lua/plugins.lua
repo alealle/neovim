@@ -79,4 +79,6 @@ return require("packer").startup(function(use)
     use({"mtdl9/vim-log-highlighting"}),
     use("lewis6991/gitsigns.nvim")
     })
+    -- rust-tools
+    use({"simrat39/rust-tools.nvim"})
 end)
