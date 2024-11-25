@@ -11,7 +11,8 @@ require("formatter").setup {
     filetype = {
         -- Formatter configurations for filetype "lua" go here
         -- and will be executed in order
-        python = {
+        -- removed python as black requres nulls and it has been discontinued
+        --[[python = {
             require("formatter.filetypes.python").black,
 
             -- You can also define your own configuration
@@ -22,7 +23,7 @@ require("formatter").setup {
                     exe = "black",
                 }
             end
-        },
+        },]]--
         lua = {
             -- "formatter.filetypes.lua" defines default configurations for the
             -- "lua" filetype

@@ -51,6 +51,8 @@ local DEFAULT_SETTINGS = {
 		"pyright",
 		"lua_ls",
 		"sqlls",
+        "terraformls",
+        "tflint",
 		"tailwindcss",
 		"tsserver",
 		"vimls",
@@ -308,7 +310,19 @@ mylspconfig.tailwindcss.setup({
 
 -- unocss: backup for tailwindcss
 --require'lspconfig'.unocss.setup{}
+-- Terraform
+mylspconfig.terraformls.setup({
+    root_dir = mylspconfig.util.root_pattern('.terraform', '.git','.'),
+})
 
+mylspconfig.tflint.setup({
+    root_dir = mylspconfig.util.root_pattern('.terraform', '.git','.'),
+})
+
+-- Scala
+mylspconfig.metals.setup{
+    root_dir = mylspconfig.util.root_pattern("build.sbt", "build.sc", "build.gradle", "pom.xml",'.'),
+}
 -- SQL
 mylspconfig.sqlls.setup({})
 

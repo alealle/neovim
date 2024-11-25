@@ -152,7 +152,6 @@ endif
 " Use gruvbox colors
 " Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
 " colorscheme neosolarized
-let g:gruvbox_italic=1
 colorscheme gruvbox
 set background=dark
 " lua require('vscode').load('light')
@@ -769,4 +768,11 @@ augroup LastPosition
 augroup END
 nohlsearch
 set spell
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
+" => Open key mapping file
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
+tabnew
+edit ~/.config/nvim/nvim_mappings.txt
+tabp
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}

@@ -3,17 +3,33 @@ local api = vim.api
 local FormatGroupId = api.nvim_create_augroup("PreWriteFormatGroup",
     {clear = true})
 api.nvim_create_autocmd("BufWritePre", {
-    pattern = { "*.py", "*.pyi",
+    pattern = { -- removed python as pyright not formats "*.py", "*.pyi",
         "*.cpp", "*.c", "*.h",
         "*.html", "*.css", "*.xml",
         "*.java",
         "*.sh", "*.zsh", "*.bash",
         "*.ts", "*.ns", "*.json", "*.js", "*.yaml",
         "*.sql",
-        "*.rs"
+        ".tf",
+--        "*.rs"
     },
     callback =function ()
         -- 10/03/2023 removing schedule so that does not print the msg to terminal
+        vim.schedule(function ()
+            vim.lsp.buf.format()
+            print("File formatted")
+        end)
+    end,
+    group = FormatGroupId,
+})
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    pattern = { "*.py" },
+    desc = "Auto-format Python files after saving",
+    callback = function()
+        local fileName = vim.api.nvim_buf_get_name(0)
+        vim.cmd(":silent !black --preview -q " .. fileName)
+        vim.cmd(":silent !isort --profile black --float-to-top -q " .. fileName)
+        vim.cmd(":silent !docformatter --in-place --black " .. fileName)
         vim.schedule(function ()
             vim.lsp.buf.format()
             print("File formatted")

@@ -31,22 +31,13 @@ ts.setup({
         "html",
         "lua",
         "vim",
+        "terraform",
+        "rust",
     },
     -- enables auto closing html tags: https://github.com/windwp/nvim-ts-autotag
     autotag = {
         enable = true,
         disable = {},
-    },
-    -- default setup for nvim-ts-rainbow2 for parentheses handling
-    rainbow = {
-        enable = true,
-        -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-        -- which query to use to find parentheses
-        query = 'rainbow-parens',
-        -- Highlight the entire buffer all at once
-        strategy = require('ts-rainbow').strategy.global,
-        -- colors = {}, -- table of hex strings
-        -- termcolors = {} -- table of colour name strings
     },
 })
 

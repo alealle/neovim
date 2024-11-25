@@ -11,3 +11,5 @@
 " Disable comment sign insertion in a new line after C-r in a comment line
 set formatoptions=jcql
 " echom 'carregado'
+" format rust on autosave
+let g:rustfmt_autosave = 1

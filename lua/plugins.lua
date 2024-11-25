@@ -29,7 +29,6 @@ return require("packer").startup(function(use)
     -- Treesitter: syntax highlighting
     use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
     use("windwp/nvim-ts-autotag")
-    use("HiPhish/nvim-ts-rainbow2")
     -- use LSPSaga for improving LSP experience
     use({
         "glepnir/lspsaga.nvim",
@@ -81,4 +80,6 @@ return require("packer").startup(function(use)
     })
     -- rust-tools
     use({"simrat39/rust-tools.nvim"})
+    -- rust vim
+    use({"rust-lang/rust.vim"})
 end)

@@ -1,0 +1,402 @@
+n  K           *@<Lua 527: /usr/local/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim/lsp/buf.lua:33>
+                 vim.lsp.buf.hover()
+n  <Esc>9      * > 9gt
+n  <Esc>8      * > 8gt
+n  <Esc>7      * > 7gt
+n  <Esc>6      * > 6gt
+n  <Esc>5      * > 5gt
+n  <Esc>4      * > 4gt
+n  <Esc>3      * > 3gt
+n  <Esc>2      * > 2gt
+n  <Esc>1      * > 1gt
+n  "p          * :reg | exec 'normal! "' . input('>').'p'<CR>
+v  #           * :<C-U>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+o  %             <Plug>(MatchitOperationForward)
+x  %             <Plug>(MatchitVisualForward)
+n  %             <Plug>(MatchitNormalForward)
+n  &           * :&&<CR>
+                 :help &-default
+v  *           * :<C-U>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+n  ,/          * :NvimTreeFindFile<CR>
+n  ,.          * :NvimTreeToggle<CR>
+n  ,,s         * <Cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>
+n  ,<Tab>      * <Cmd>BufferLineCycleNext<CR>
+n  ,fd         * <Cmd>Telescope lsp_definitions<CR>
+n  ,fr         * <Cmd>Telescope lsp_references<CR>
+n  ,fp         * <Cmd>Telescope registers<CR>
+n  ,fh         * <Cmd>Telescope help_tags<CR>
+n  ,fb         * <Cmd>Telescope buffers<CR>
+n  K           *@<Lua 527: /usr/local/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim/lsp/buf.lua:33>
+                 vim.lsp.buf.hover()
+n  <Esc>9      * > 9gt
+n  <Esc>8      * > 8gt
+n  <Esc>7      * > 7gt
+n  <Esc>6      * > 6gt
+n  <Esc>5      * > 5gt
+n  <Esc>4      * > 4gt
+n  <Esc>3      * > 3gt
+n  <Esc>2      * > 2gt
+n  <Esc>1      * > 1gt
+n  "p          * :reg | exec 'normal! "' . input('>').'p'<CR>
+v  #           * :<C-U>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+o  %             <Plug>(MatchitOperationForward)
+x  %             <Plug>(MatchitVisualForward)
+n  %             <Plug>(MatchitNormalForward)
+n  &           * :&&<CR>
+                 :help &-default
+v  *           * :<C-U>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+n  ,/          * :NvimTreeFindFile<CR>
+n  ,.          * :NvimTreeToggle<CR>
+n  ,,s         * <Cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>
+n  ,<Tab>      * <Cmd>BufferLineCycleNext<CR>
+n  ,fd         * <Cmd>Telescope lsp_definitions<CR>
+n  ,fr         * <Cmd>Telescope lsp_references<CR>
+n  ,fp         * <Cmd>Telescope registers<CR>
+n  ,fh         * <Cmd>Telescope help_tags<CR>
+n  ,fb         * <Cmd>Telescope buffers<CR>
+n  ,fg         * <Cmd>Telescope live_grep<CR>
+n  ,ff         * <Cmd>Telescope find_files<CR>
+n  ,i          * <Cmd>Lspsaga term_toggle<CR>
+n  ,h          * <Cmd>Lspsaga hover_doc<CR>
+n  ,o          * <Cmd>Lspsaga outline<CR>
+n  ,A          * <Cmd>Lspsaga show_cursor_diagnostics<CR>
+n  ,ab         * <Cmd>Lspsaga show_buf_diagnostics<CR>
+n  ,a          * <Cmd>Lspsaga show_line_diagnostics<CR>
+n  ,d          * <Cmd>Lspsaga peek_definition<CR>
+n  ,rn         * <Cmd>Lspsaga rename<CR>
+v  ,ca         * <Cmd>Lspsaga code_action<CR>
+n  ,ca         * <Cmd>Lspsaga code_action<CR>
+n  ,F          * <Cmd>Lspsaga lsp_finder<CR>
+n  ,=          * <Lua 120: ~/.config/nvim/plugin/lsp.lua:463>
+   ,q            :e ~/buffer<CR>
+   ,s?           z=
+   ,sa           zg
+   ,sp           [s
+   ,sn           ]s
+   ,ss           :setlocal spell!<CR>
+n  ,gw         * :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<CR>:copen<CR>
+n  ,g          * :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<CR>:copen<CR>
+   ,p            :cp<CR>
+   ,n            :cn<CR>
+   ,co           ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
+   ,cc           :botright cope<CR>
+v  ,r          * :call VisualSelection('replace', '')<CR>
+n  ,;;         * :silent!<CR>:execute 'set nohlsearch'<CR>
+n  ,sv         * :source $MYVIMRC<CR>
+n  ,ev         * :vsplit $MYVIMRC<CR>
+   ,D          * :put =strftime('%Y-%m-%d %H:%M:%S%z')
+v  ,mk           :m'<-2<CR>`>my`<mzgv`yo`z
+v  ,mj           :m'>+<CR>`<my`>mzgv`yo`z
+n  ,mk           mz:m-2<CR>`z
+n  ,mj           mz:m+<CR>`z
+n  ,:s         * :%s /\v//g<Left><Left><Left>
+n  ,wa         * :wa!<CR>
+n  ,w          * :w!<CR>
+n  ,te         * :tabedit <C-R>=expand("%:p:h")<CR>/
+n  ,tl         * :exe "tabn ".g:lasttab<CR>
+   ,tp         * :tabp<CR>
+   ,tm         * :tabmove<CR>
+   ,tc         * :tabclose<CR>
+   ,to         * :tabonly<CR>
+   ,tn         * :tabnext<CR>
+n  ,cd         * :cd %:p:h<CR>:pwd<CR>
+n  ,bg9        * :9buffer<CR>
+n  ,bg8        * :8buffer<CR>
+n  ,bg7        * :7buffer<CR>
+n  ,bg6        * :6buffer<CR>
+n  ,bg5        * :5buffer<CR>
+n  ,bg4        * :4buffer<CR>
+n  ,bg3        * :3buffer<CR>
+n  ,bg2        * :2buffer<CR>
+n  ,bg1        * :1buffer<CR>
+   ,bm         * :buffer<Space>
+   ,B          * :buffers<CR>
+   ,bp         * :bprevious<CR>
+   ,bn         * :bnext<CR>
+n  ,ba         * :bufdo bd<CR>
+n  ,bd         * :Bclose<CR>:tabclose<CR>gT
+n  ,<CR>       * :noh<CR>
+n  -           * ddp
+n  /           * /\v
+n  0           * ^
+n  >>            mappings.txt
+x  @           * mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>' : '@'
+                 :help v_@-default
+x  Q           * mode() ==# 'V' ? ':normal! @<C-R>=reg_recorded()<CR><CR>' : 'Q'
+                 :help v_Q-default
+x  S             <Plug>VSurround
+n  Y           * y$
+                 :help Y-default
+o  [%            <Plug>(MatchitOperationMultiBackward)
+x  [%            <Plug>(MatchitVisualMultiBackward)
+n  [%            <Plug>(MatchitNormalMultiBackward)
+n  [E          * <Lua 269: ~/.config/nvim/plugin/lspsaga.lua:49>
+n  [e          * <Cmd>Lspsaga diagnostic_jump_prev<CR>
+n  [d          * <Lua 15: vim/_defaults.lua:0>
+                 Jump to the previous diagnostic
+o  ]%            <Plug>(MatchitOperationMultiForward)
+x  ]%            <Plug>(MatchitVisualMultiForward)
+n  ]%            <Plug>(MatchitNormalMultiForward)
+n  ]E          * <Lua 274: ~/.config/nvim/plugin/lspsaga.lua:52>
+n  ]e          * <Cmd>Lspsaga diagnostic_jump_next<CR>
+n  ]d          * <Lua 14: vim/_defaults.lua:0>
+                 Jump to the next diagnostic
+n  _           * ddkP
+x  a%            <Plug>(MatchitVisualTextObject)
+n  cS            <Plug>CSurround
+n  cs            <Plug>Csurround
+n  ds            <Plug>Dsurround
+x  gS            <Plug>VgSurround
+o  g%            <Plug>(MatchitOperationBackward)
+x  g%            <Plug>(MatchitVisualBackward)
+n  g%            <Plug>(MatchitNormalBackward)
+o  gc          * <Lua 13: vim/_defaults.lua:0>
+                 Comment textobject
+n  gcc         * <Lua 12: vim/_defaults.lua:0>
+                 Toggle comment line
+x  gc          * <Lua 11: vim/_defaults.lua:0>
+                 Toggle comment
+n  gc          * <Lua 10: vim/_defaults.lua:0>
+                 Toggle comment
+x  gx          * <Lua 9: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+n  gx          * <Lua 8: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+n  ySS           <Plug>YSsurround
+n  ySs           <Plug>YSsurround
+n  yss           <Plug>Yssurround
+n  yS            <Plug>YSurround
+n  ys            <Plug>Ysurround
+n  y<C-G>      & :<C-U>call setreg(v:register, fugitive#Object(@%))<CR>
+n  <C-;>       * <Lua 380: ~/.config/nvim/after/plugin/nvimtree.lua:112>
+s  <C-J>       * <Lua 378: ~/.config/nvim/after/plugin/luasnip.lua:29>
+s  <C-K>       * <Lua 376: ~/.config/nvim/after/plugin/luasnip.lua:21>
+n  <S-Tab>     * <Cmd>BufferLineCyclePrev<CR>
+v  <Plug>VgSurround * :<C-U>call <SNR>56_opfunc(visualmode(),visualmode() ==# 'V' ? 0 : 1)<CR>
+v  <Plug>VSurround * :<C-U>call <SNR>56_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
+n  <Plug>YSurround * <SNR>56_opfunc2('setup')
+n  <Plug>Ysurround * <SNR>56_opfunc('setup')
+n  <Plug>YSsurround * <SNR>56_opfunc2('setup').'_'
+n  <Plug>Yssurround * '^'.v:count1.<SNR>56_opfunc('setup').'g_'
+n  <Plug>CSurround * :<C-U>call <SNR>56_changesurround(1)<CR>
+n  <Plug>Csurround * :<C-U>call <SNR>56_changesurround()<CR>
+n  <Plug>Dsurround * :<C-U>call <SNR>56_dosurround(<SNR>56_inputtarget())<CR>
+n  <Plug>SurroundRepeat * .
+n  <Plug>fugitive: & <Nop>
+n  <Plug>fugitive:y<C-G> & :<C-U>call setreg(v:register, fugitive#Object(@%))<CR>
+n  <Plug>PlenaryTestFile * :lua require('plenary.test_harness').test_file(vim.fn.expand("%:p"))<CR>
+s  <Plug>luasnip-jump-prev * <Cmd>lua require'luasnip'.jump(-1)<CR>
+s  <Plug>luasnip-jump-next * <Cmd>lua require'luasnip'.jump(1)<CR>
+s  <Plug>luasnip-prev-choice * <Cmd>lua require'luasnip'.change_choice(-1)<CR>
+s  <Plug>luasnip-next-choice * <Cmd>lua require'luasnip'.change_choice(1)<CR>
+s  <Plug>luasnip-expand-snippet * <Cmd>lua require'luasnip'.expand()<CR>
+s  <Plug>luasnip-expand-or-jump * <Cmd>lua require'luasnip'.expand_or_jump()<CR>
+   <Plug>luasnip-expand-repeat * <Cmd>lua require'luasnip'.expand_repeat()<CR>
+   <Plug>luasnip-delete-check * <Cmd>lua require'luasnip'.unlink_current_if_deleted()<CR>
+x  <Plug>(MatchitVisualTextObject)   <Plug>(MatchitVisualMultiBackward)o<Plug>(MatchitVisualMultiForward)
+o  <Plug>(MatchitOperationMultiForward) * :<C-U>call matchit#MultiMatch("W",  "o")<CR>
+o  <Plug>(MatchitOperationMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "o")<CR>
+x  <Plug>(MatchitVisualMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>m'gv``
+x  <Plug>(MatchitVisualMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>m'gv``
+n  <Plug>(MatchitNormalMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>
+n  <Plug>(MatchitNormalMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>
+o  <Plug>(MatchitOperationBackward) * :<C-U>call matchit#Match_wrapper('',0,'o')<CR>
+o  <Plug>(MatchitOperationForward) * :<C-U>call matchit#Match_wrapper('',1,'o')<CR>
+x  <Plug>(MatchitVisualBackward) * :<C-U>call matchit#Match_wrapper('',0,'v')<CR>m'gv``
+x  <Plug>(MatchitVisualForward) * :<C-U>call matchit#Match_wrapper('',1,'v')<CR>:if col("''") != col("$") | exe ":normal! m'" | endif<CR>gv``
+n  <Plug>(MatchitNormalBackward) * :<C-U>call matchit#Match_wrapper('',0,'n')<CR>
+n  <Plug>(MatchitNormalForward) * :<C-U>call matchit#Match_wrapper('',1,'n')<CR>
+v  <F8>          <Esc>:call Build()<CR>
+no <F8>          :call Build()<CR>
+v  <F5>          <Esc>:call CompileRun()<CR>
+no <F5>          :call CompileRun()<CR>
+n  <C-W>9      * w9wincmd w<CR>
+n  <C-W>8      * w8wincmd w<CR>
+n  <C-W>7      * w7wincmd w<CR>
+n  <C-W>6      * w6wincmd w<CR>
+n  <C-W>5      * w5wincmd w<CR>
+n  <C-W>4      * w4wincmd w<CR>
+n  <C-W>3      * w3wincmd w<CR>
+n  <C-W>2      * w2wincmd w<CR>
+n  <C-W>1      * w1wincmd w<CR>
+n  <C-H>       * <C-W>h
+n  <C-K>       * <C-W>k
+n  <C-J>       * <C-W>j
+n  <C-W><C-D>    <C-W>d
+                 Show diagnostics under the cursor
+n  <C-W>d      * <Lua 16: vim/_defaults.lua:0>
+                 Show diagnostics under the cursor
+n  <C-L>       * <C-W>l
+n  ,fg         * <Cmd>Telescope live_grep<CR>
+n  ,ff         * <Cmd>Telescope find_files<CR>
+n  ,i          * <Cmd>Lspsaga term_toggle<CR>
+n  ,h          * <Cmd>Lspsaga hover_doc<CR>
+n  ,o          * <Cmd>Lspsaga outline<CR>
+n  ,A          * <Cmd>Lspsaga show_cursor_diagnostics<CR>
+n  ,ab         * <Cmd>Lspsaga show_buf_diagnostics<CR>
+n  ,a          * <Cmd>Lspsaga show_line_diagnostics<CR>
+n  ,d          * <Cmd>Lspsaga peek_definition<CR>
+n  ,rn         * <Cmd>Lspsaga rename<CR>
+v  ,ca         * <Cmd>Lspsaga code_action<CR>
+n  ,ca         * <Cmd>Lspsaga code_action<CR>
+n  ,F          * <Cmd>Lspsaga lsp_finder<CR>
+n  ,=          * <Lua 120: ~/.config/nvim/plugin/lsp.lua:463>
+   ,q            :e ~/buffer<CR>
+   ,s?           z=
+   ,sa           zg
+   ,sp           [s
+   ,sn           ]s
+   ,ss           :setlocal spell!<CR>
+n  ,gw         * :silent execute "grep! -R " . shellescape(expand('<cword>')) . " ."<CR>:copen<CR>
+n  ,g          * :silent execute "grep! -R " . shellescape(expand('<cWORD>')) . " ."<CR>:copen<CR>
+   ,p            :cp<CR>
+   ,n            :cn<CR>
+   ,co           ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
+   ,cc           :botright cope<CR>
+v  ,r          * :call VisualSelection('replace', '')<CR>
+n  ,;;         * :silent!<CR>:execute 'set nohlsearch'<CR>
+n  ,sv         * :source $MYVIMRC<CR>
+n  ,ev         * :vsplit $MYVIMRC<CR>
+   ,D          * :put =strftime('%Y-%m-%d %H:%M:%S%z')
+v  ,mk           :m'<-2<CR>`>my`<mzgv`yo`z
+v  ,mj           :m'>+<CR>`<my`>mzgv`yo`z
+n  ,mk           mz:m-2<CR>`z
+n  ,mj           mz:m+<CR>`z
+n  ,:s         * :%s /\v//g<Left><Left><Left>
+n  ,wa         * :wa!<CR>
+n  ,w          * :w!<CR>
+n  ,te         * :tabedit <C-R>=expand("%:p:h")<CR>/
+n  ,tl         * :exe "tabn ".g:lasttab<CR>
+   ,tp         * :tabp<CR>
+   ,tm         * :tabmove<CR>
+   ,tc         * :tabclose<CR>
+   ,to         * :tabonly<CR>
+   ,tn         * :tabnext<CR>
+n  ,cd         * :cd %:p:h<CR>:pwd<CR>
+n  ,bg9        * :9buffer<CR>
+n  ,bg8        * :8buffer<CR>
+n  ,bg7        * :7buffer<CR>
+n  ,bg6        * :6buffer<CR>
+n  ,bg5        * :5buffer<CR>
+n  ,bg4        * :4buffer<CR>
+n  ,bg3        * :3buffer<CR>
+n  ,bg2        * :2buffer<CR>
+n  ,bg1        * :1buffer<CR>
+   ,bm         * :buffer<Space>
+   ,B          * :buffers<CR>
+   ,bp         * :bprevious<CR>
+   ,bn         * :bnext<CR>
+n  ,ba         * :bufdo bd<CR>
+n  ,bd         * :Bclose<CR>:tabclose<CR>gT
+n  ,<CR>       * :noh<CR>
+n  -           * ddp
+n  /           * /\v
+n  0           * ^
+n  >>            mappings.txt
+x  @           * mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>' : '@'
+                 :help v_@-default
+x  Q           * mode() ==# 'V' ? ':normal! @<C-R>=reg_recorded()<CR><CR>' : 'Q'
+                 :help v_Q-default
+x  S             <Plug>VSurround
+n  Y           * y$
+                 :help Y-default
+o  [%            <Plug>(MatchitOperationMultiBackward)
+x  [%            <Plug>(MatchitVisualMultiBackward)
+n  [%            <Plug>(MatchitNormalMultiBackward)
+n  [E          * <Lua 269: ~/.config/nvim/plugin/lspsaga.lua:49>
+n  [e          * <Cmd>Lspsaga diagnostic_jump_prev<CR>
+n  [d          * <Lua 15: vim/_defaults.lua:0>
+                 Jump to the previous diagnostic
+o  ]%            <Plug>(MatchitOperationMultiForward)
+x  ]%            <Plug>(MatchitVisualMultiForward)
+n  ]%            <Plug>(MatchitNormalMultiForward)
+n  ]E          * <Lua 274: ~/.config/nvim/plugin/lspsaga.lua:52>
+n  ]e          * <Cmd>Lspsaga diagnostic_jump_next<CR>
+n  ]d          * <Lua 14: vim/_defaults.lua:0>
+                 Jump to the next diagnostic
+n  _           * ddkP
+x  a%            <Plug>(MatchitVisualTextObject)
+n  cS            <Plug>CSurround
+n  cs            <Plug>Csurround
+n  ds            <Plug>Dsurround
+x  gS            <Plug>VgSurround
+o  g%            <Plug>(MatchitOperationBackward)
+x  g%            <Plug>(MatchitVisualBackward)
+n  g%            <Plug>(MatchitNormalBackward)
+o  gc          * <Lua 13: vim/_defaults.lua:0>
+                 Comment textobject
+n  gcc         * <Lua 12: vim/_defaults.lua:0>
+                 Toggle comment line
+x  gc          * <Lua 11: vim/_defaults.lua:0>
+                 Toggle comment
+n  gc          * <Lua 10: vim/_defaults.lua:0>
+                 Toggle comment
+x  gx          * <Lua 9: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+n  gx          * <Lua 8: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+n  ySS           <Plug>YSsurround
+n  ySs           <Plug>YSsurround
+n  yss           <Plug>Yssurround
+n  yS            <Plug>YSurround
+n  ys            <Plug>Ysurround
+n  y<C-G>      & :<C-U>call setreg(v:register, fugitive#Object(@%))<CR>
+n  <C-;>       * <Lua 380: ~/.config/nvim/after/plugin/nvimtree.lua:112>
+s  <C-J>       * <Lua 378: ~/.config/nvim/after/plugin/luasnip.lua:29>
+s  <C-K>       * <Lua 376: ~/.config/nvim/after/plugin/luasnip.lua:21>
+n  <S-Tab>     * <Cmd>BufferLineCyclePrev<CR>
+v  <Plug>VgSurround * :<C-U>call <SNR>56_opfunc(visualmode(),visualmode() ==# 'V' ? 0 : 1)<CR>
+v  <Plug>VSurround * :<C-U>call <SNR>56_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
+n  <Plug>YSurround * <SNR>56_opfunc2('setup')
+n  <Plug>Ysurround * <SNR>56_opfunc('setup')
+n  <Plug>YSsurround * <SNR>56_opfunc2('setup').'_'
+n  <Plug>Yssurround * '^'.v:count1.<SNR>56_opfunc('setup').'g_'
+n  <Plug>CSurround * :<C-U>call <SNR>56_changesurround(1)<CR>
+n  <Plug>Csurround * :<C-U>call <SNR>56_changesurround()<CR>
+n  <Plug>Dsurround * :<C-U>call <SNR>56_dosurround(<SNR>56_inputtarget())<CR>
+n  <Plug>SurroundRepeat * .
+n  <Plug>fugitive: & <Nop>
+n  <Plug>fugitive:y<C-G> & :<C-U>call setreg(v:register, fugitive#Object(@%))<CR>
+n  <Plug>PlenaryTestFile * :lua require('plenary.test_harness').test_file(vim.fn.expand("%:p"))<CR>
+s  <Plug>luasnip-jump-prev * <Cmd>lua require'luasnip'.jump(-1)<CR>
+s  <Plug>luasnip-jump-next * <Cmd>lua require'luasnip'.jump(1)<CR>
+s  <Plug>luasnip-prev-choice * <Cmd>lua require'luasnip'.change_choice(-1)<CR>
+s  <Plug>luasnip-next-choice * <Cmd>lua require'luasnip'.change_choice(1)<CR>
+s  <Plug>luasnip-expand-snippet * <Cmd>lua require'luasnip'.expand()<CR>
+s  <Plug>luasnip-expand-or-jump * <Cmd>lua require'luasnip'.expand_or_jump()<CR>
+   <Plug>luasnip-expand-repeat * <Cmd>lua require'luasnip'.expand_repeat()<CR>
+   <Plug>luasnip-delete-check * <Cmd>lua require'luasnip'.unlink_current_if_deleted()<CR>
+x  <Plug>(MatchitVisualTextObject)   <Plug>(MatchitVisualMultiBackward)o<Plug>(MatchitVisualMultiForward)
+o  <Plug>(MatchitOperationMultiForward) * :<C-U>call matchit#MultiMatch("W",  "o")<CR>
+o  <Plug>(MatchitOperationMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "o")<CR>
+x  <Plug>(MatchitVisualMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>m'gv``
+x  <Plug>(MatchitVisualMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>m'gv``
+n  <Plug>(MatchitNormalMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>
+n  <Plug>(MatchitNormalMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>
+o  <Plug>(MatchitOperationBackward) * :<C-U>call matchit#Match_wrapper('',0,'o')<CR>
+o  <Plug>(MatchitOperationForward) * :<C-U>call matchit#Match_wrapper('',1,'o')<CR>
+x  <Plug>(MatchitVisualBackward) * :<C-U>call matchit#Match_wrapper('',0,'v')<CR>m'gv``
+x  <Plug>(MatchitVisualForward) * :<C-U>call matchit#Match_wrapper('',1,'v')<CR>:if col("''") != col("$") | exe ":normal! m'" | endif<CR>gv``
+n  <Plug>(MatchitNormalBackward) * :<C-U>call matchit#Match_wrapper('',0,'n')<CR>
+n  <Plug>(MatchitNormalForward) * :<C-U>call matchit#Match_wrapper('',1,'n')<CR>
+v  <F8>          <Esc>:call Build()<CR>
+no <F8>          :call Build()<CR>
+v  <F5>          <Esc>:call CompileRun()<CR>
+no <F5>          :call CompileRun()<CR>
+n  <C-W>9      * w9wincmd w<CR>
+n  <C-W>8      * w8wincmd w<CR>
+n  <C-W>7      * w7wincmd w<CR>
+n  <C-W>6      * w6wincmd w<CR>
+n  <C-W>5      * w5wincmd w<CR>
+n  <C-W>4      * w4wincmd w<CR>
+n  <C-W>3      * w3wincmd w<CR>
+n  <C-W>2      * w2wincmd w<CR>
+n  <C-W>1      * w1wincmd w<CR>
+n  <C-H>       * <C-W>h
+n  <C-K>       * <C-W>k
+n  <C-J>       * <C-W>j
+n  <C-W><C-D>    <C-W>d
+                 Show diagnostics under the cursor
+n  <C-W>d      * <Lua 16: vim/_defaults.lua:0>
+                 Show diagnostics under the cursor
+n  <C-L>       * <C-W>l

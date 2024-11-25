@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1703358377/share/lua/5.1/?.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1703358377/share/lua/5.1/?/init.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1703358377/lib/luarocks/rocks-5.1/?.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1703358377/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1703358377/lib/lua/5.1/?.so"
+local package_path_str = "/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1716656478/share/lua/5.1/?.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1716656478/share/lua/5.1/?/init.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1716656478/lib/luarocks/rocks-5.1/?.lua;/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1716656478/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/alessandroalle/.cache/nvim/packer_hererocks/2.1.1716656478/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -164,6 +164,11 @@ _G.packer_plugins = {
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
     url = "https://github.com/norcalli/nvim-colorizer.lua"
   },
+  ["nvim-lint"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-lint",
+    url = "https://github.com/mfussenegger/nvim-lint"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
@@ -208,6 +213,16 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/refactoring.nvim",
     url = "https://github.com/ThePrimeagen/refactoring.nvim"
+  },
+  ["rust-tools.nvim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
+    url = "https://github.com/simrat39/rust-tools.nvim"
+  },
+  ["rust.vim"] = {
+    loaded = true,
+    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/rust.vim",
+    url = "https://github.com/rust-lang/rust.vim"
   },
   ["telescope.nvim"] = {
     loaded = true,
