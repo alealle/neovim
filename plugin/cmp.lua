@@ -275,7 +275,31 @@ _ = vim.cmd([[
 -- Set up lspconfig.
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+--[[
+"rust_analyzer",
+		"arduino_language_server",
+		"bashls",
+		"clangd",
+		"cmake",
+        "gopls",
+		-- "eslint",
+		"jdtls",
+		-- "quick_lint_js",
+		--"prettier",
+		"pyright",
+		"lua_ls",
+		"sqlls",
+        "terraformls",
+        "tflint",
+		"tailwindcss",
+		"ts_ls",
+		"vimls",zR
+        ]]--
+
 require("lspconfig")["clangd"].setup({
+	capabilities = capabilities,
+})
+require("lspconfig")["cmake"].setup({
 	capabilities = capabilities,
 })
 require("lspconfig")["pyright"].setup({
@@ -290,12 +314,21 @@ require("lspconfig")["bashls"].setup({
 require("lspconfig")["lua_ls"].setup({
 	capabilities = capabilities,
 })
-require("lspconfig")["tsserver"].setup({
+require("lspconfig")["ts_ls"].setup({
 	capabilities = capabilities,
 })
 require("lspconfig")["tailwindcss"].setup({
 	capabilities = capabilities,
 })
 require("lspconfig")["sqlls"].setup({
+	capabilities = capabilities,
+})
+require("lspconfig")["rust_analyzer"].setup({
+	capabilities = capabilities,
+})
+require("lspconfig")["gopls"].setup({
+	capabilities = capabilities,
+})
+require("lspconfig")["terraformls"].setup({
 	capabilities = capabilities,
 })

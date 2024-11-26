@@ -4,6 +4,10 @@ if not status then
 end
 
 ts.setup({
+    sync_install = false,
+    auto_install = true,
+    ignore_install = {},
+    modules = {},
     highlight = {
         enable = true,
         disable = {},
@@ -33,6 +37,7 @@ ts.setup({
         "vim",
         "terraform",
         "rust",
+        "go",
     },
     -- enables auto closing html tags: https://github.com/windwp/nvim-ts-autotag
     autotag = {

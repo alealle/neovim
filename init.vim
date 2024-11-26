@@ -152,7 +152,7 @@ endif
 " Use gruvbox colors
 " Others: matlab tokyonight, neosolarized, mac_classic, parchment, PaperColor
 " colorscheme neosolarized
-colorscheme gruvbox
+colorscheme tokyonight
 set background=dark
 " lua require('vscode').load('light')
 

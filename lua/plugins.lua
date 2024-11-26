@@ -15,7 +15,8 @@ return require("packer").startup(function(use)
         "neovim/nvim-lspconfig",
 -- installing linter as per mason recommedation
         "mfussenegger/nvim-lint",
-        "mhartington/formatter.nvim",
+-- changed by conform 28/11/2024
+        --        "mhartington/formatter.nvim",
 --        "jay-babu/mason-null-ls.nvim",
 --        "jose-elias-alvarez/null-ls.nvim",
         requires = { "nvim-lua/plenary.nvim" },
@@ -41,6 +42,8 @@ return require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter" }
         }
     })
+    -- formatter added 26/11/2024
+    use("stevearc/conform.nvim")
     -- Snippetss
     use({ "L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*" })
     use("saadparwaiz1/cmp_luasnip")

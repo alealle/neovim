@@ -14,11 +14,6 @@ if not status3 then
 	return
 end
 
-local status4, formatter = pcall(require, "formatter")
-if not status4 then
-	return
-end
-local util = require("formatter.util")
 
 --local status4, mason_null_ls = pcall(require, "mason-null-ls")
 --if not status4 then
@@ -44,6 +39,7 @@ local DEFAULT_SETTINGS = {
 		"bashls",
 		"clangd",
 		"cmake",
+        "gopls",
 		-- "eslint",
 		"jdtls",
 		-- "quick_lint_js",
@@ -54,7 +50,7 @@ local DEFAULT_SETTINGS = {
         "terraformls",
         "tflint",
 		"tailwindcss",
-		"tsserver",
+		"ts_ls",
 		"vimls",
 	},
 
@@ -147,13 +143,15 @@ end
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/428
 -- check https://clangd.llvm.org/installation for improving build and
 -- autocompletion with YouCompleteMe
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.offsetEncoding = { "utf-16" }
 mylspconfig.clangd.setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
-	capabilities = capabilities,
+    cmd = {
+    "clangd",
+--    "--offset-encoding=utf-16",
+  },
 })
+mylspconfig.cmake.setup({})
 
 -- Python:
 mylspconfig.pyright.setup({
@@ -240,11 +238,8 @@ mylspconfig.lua_ls.setup({
 --     }
 --       })
 -- Typescript:
-mylspconfig.tsserver.setup({
-	on_attach = on_attach,
+mylspconfig.ts_ls.setup({
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-	flags = lsp_flags,
-	settings = { documentFormatting = true },
 })
 
 -- HTML, CSS, Javascript and other languages focused on web development
@@ -326,141 +321,21 @@ mylspconfig.metals.setup{
 -- SQL
 mylspconfig.sqlls.setup({})
 
--- :> null-ls: first source of truth
--- :> having known that null-ls has been archived and that it may conflict with
--- nvim core https://www.youtube.com/watch?v=oy_-hQdkoXg, I decided to stop using it
--- null_ls.setup({
--- 	sources = {
--- 		-- Code action
--- 		null_ls.builtins.code_actions.eslint_d,
--- 		null_ls.builtins.code_actions.shellcheck,
--- 		-- Filetypes: { "go", "javascript", "lua", "python", "typescript" }
--- 		null_ls.builtins.code_actions.refactoring,
--- 		----------------------------------------------------------------------
--- 		-- Diagnostics
--- 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
--- 		-- Mason: null_ls.builtins.diagnostics.eslint_d,
--- 		-- Filetypes: { "python" } -- eliminating redundancy because lspconfig has pyright
--- 		-- null_ls.builtins.diagnostics.flake8,
--- 		-- Filetypes: {"sh"}
--- 		-- Mason: null_ls.builtins.diagnostics.shellcheck,
--- 		-- Filetypes: {"vim"}
--- 		null_ls.builtins.diagnostics.vint,
--- 		-- Filetypes: { "scss", "less", "css", "sass" }
--- 		-- null_ls.builtins.diagnostics.stylelint,
--- 		-- Filetypes: { "html", "xml" }
--- 		null_ls.builtins.diagnostics.tidy,
--- 		----------------------------------------------------------------------
--- 		--Formatting
--- 		-- null_ls.builtins.formatting.autopep8,
--- 		-- Mason: null_ls.builtins.formatting.beautysh.with({
--- 		--    filetypes = { "bash", "sh", "zsh" }, -- change to your dialect
--- 		--}),
--- 		-- c
--- 		null_ls.builtins.formatting.uncrustify,
--- 		-- python
--- 		null_ls.builtins.formatting.black,
--- 		null_ls.builtins.formatting.isort,
--- 		--null_ls.builtins.formatting.csharpier,
--- 		-- Filetypes: { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }
--- 		-- Mason: null_ls.builtins.formatting.eslint_d,
--- 		-- Filetypes: {{ "javascript", "javascriptreact", "typescript", "typescriptreact",
--- 		-- "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown",
--- 		-- "markdown.mdx", "graphql", "handlebars" }}
--- 		-- Mason: null_ls.builtins.formatting.prettierd,
---         -- change to your dialect
--- 		null_ls.builtins.formatting.sqlfluff.with({
--- 		    extra_args = { "--dialect", "sqlite" },
--- 		}),
--- Mason: null_ls.builtins.formatting.stylua,
--- 	},
--- on_attach warnings removed after I got to know that NulllsInfo does it
---    on_attach = function(client, bufnr)
---        --  Code moved from lspconfig.lua
---        if client.supports_method("textDocument/formatting") then
---            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
---            vim.api.nvim_create_autocmd("BufWritePre", {
---                group = augroup,
---                buffer = bufnr,
---                callback = function()
---                    -- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
---                    -- on later neovim version, you should use vim.lsp.buf.format({ async = false }) instead
---                    vim.lsp.buf.formatting_sync()
---                end,
---            })
---        else
---            vim.api.nvim_command([[echom "Nulls client's does not support formatting"]])
---        end
---        vim.api.nvim_command([[echom "Null-ls attached"]])
---    end,
--- })
 
--- > mason-null-ls
--- mason_null_ls.setup({
--- 	ensure_installed = {
--- 		-- Opt to list sources here, when available in mason.
--- 		-- .sh
--- 		-- "black",
--- 		"eslint_d",
--- 		-- .sh
--- 		"shellcheck",
--- 		--"sqlfluff",
--- 		"stylelint",
--- 	},
--- 	automatic_installation = false,
--- 	handlers = {},
--- })
--- Utilities for creating configurations
-
--- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
-formatter.setup({
-	-- Enable or disable logging
-	logging = true,
-	-- Set the log level
-	log_level = vim.log.levels.WARN,
-	-- All formatter configurations are opt-in
-	filetype = {
-		-- Formatter configurations for filetype "lua" go here
-		-- and will be executed in order
-		lua = {
-			-- "formatter.filetypes.lua" defines default configurations for the
-			-- "lua" filetype
-			require("formatter.filetypes.lua").stylua,
-
-			-- You can also define your own configuration
-			function()
-				-- Full specification of configurations is down below and in Vim help
-				-- files
-				return {
-					exe = "stylua",
-					args = {
-						"--search-parent-directories",
-						"--stdin-filepath",
-						util.escape_path(util.get_current_buffer_file_path()),
-						"--",
-						"-",
-					},
-					stdin = true,
-				}
-			end,
-		},
-
-		--		java = {
-		--			-- "formatter.filetypes.lua" defines default configurations for the
-		--			-- "lua" filetype
-		--			require("formatter.filetypes.java").google_java_format,
-		--
-		--			function()
-		--				-- Full specification of configurations is down below and in Vim help
-		--				-- files
-		--				return {
-		--					stdin = true,
-		--				}
-		--			end,
-		--		},
-	},
-})
-vim.keymap.set("n", "<leader>=", function()
-	vim.api.nvim_command([[:Format]])
-end, { noremap = true })
+-- Golang
+require'lspconfig'.gopls.setup{
+  on_attach = on_attach,
+  cmd = {"gopls"},
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  root_dir = mylspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+  settings = {
+    gopls = {
+      completeUnimported = true,
+      usePlaceholders = true,
+      analyses = {
+        unusedparams = true,
+      },
+    },
+  },
+}
 vim.api.nvim_command([[echom "All LSP plugins setup"]])
