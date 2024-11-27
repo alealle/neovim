@@ -9,24 +9,20 @@ return require("packer").startup(function(use)
     -- nulls depends on plenary
     use("rafamadriz/friendly-snippets")
     use("nvim-lua/plenary.nvim")
-    use {
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "neovim/nvim-lspconfig",
--- installing linter as per mason recommedation
-        "mfussenegger/nvim-lint",
--- changed by conform 28/11/2024
-        --        "mhartington/formatter.nvim",
---        "jay-babu/mason-null-ls.nvim",
---        "jose-elias-alvarez/null-ls.nvim",
-        requires = { "nvim-lua/plenary.nvim" },
-    }
     -- nvim-cmp and plugins required by it
     use("hrsh7th/cmp-nvim-lsp")
     use("hrsh7th/cmp-buffer")
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/nvim-cmp")
+    -- installing cmp before as it is required by lsp-config 27-11-2024
+    use {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+        requires = { "nvim-lua/plenary.nvim",
+    "hrsh7th/nvim-cmp"},
+    }
     -- Treesitter: syntax highlighting
     use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
     use("windwp/nvim-ts-autotag")
@@ -42,8 +38,6 @@ return require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter" }
         }
     })
-    -- formatter added 26/11/2024
-    use("stevearc/conform.nvim")
     -- Snippetss
     use({ "L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*" })
     use("saadparwaiz1/cmp_luasnip")
@@ -55,10 +49,6 @@ return require("packer").startup(function(use)
     use("tpope/vim-fugitive")
     -- Typing
     use("tpope/vim-surround")
-    -- formatting
-    require('packer').use { 'mhartington/formatter.nvim' }
-    -- use("python/black")
-    use("psf/black", {branch = 'stable'})
     -- use("vim-scripts/indentpython.vim")
     -- GUI
     use("akinsho/bufferline.nvim", { tag = "v2.*" })
@@ -78,11 +68,12 @@ return require("packer").startup(function(use)
         requires = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter" },
-    use({"mtdl9/vim-log-highlighting"}),
-    use("lewis6991/gitsigns.nvim")
+        use({ "mtdl9/vim-log-highlighting" }),
+        use("lewis6991/gitsigns.nvim")
     })
     -- rust-tools
-    use({"simrat39/rust-tools.nvim"})
+    use({ "simrat39/rust-tools.nvim" })
     -- rust vim
-    use({"rust-lang/rust.vim"})
+    use({ "rust-lang/rust.vim" })
+    use({ "stevearc/conform.nvim" })
 end)

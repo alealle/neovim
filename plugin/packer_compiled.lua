@@ -79,11 +79,6 @@ _G.packer_plugins = {
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
-  black = {
-    loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/black",
-    url = "https://github.com/psf/black"
-  },
   ["bufferline.nvim"] = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
@@ -118,11 +113,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/conform.nvim",
     url = "https://github.com/stevearc/conform.nvim"
-  },
-  ["formatter.nvim"] = {
-    loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/formatter.nvim",
-    url = "https://github.com/mhartington/formatter.nvim"
   },
   ["friendly-snippets"] = {
     loaded = true,
@@ -168,11 +158,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
     url = "https://github.com/norcalli/nvim-colorizer.lua"
-  },
-  ["nvim-lint"] = {
-    loaded = true,
-    path = "/Users/alessandroalle/.local/share/nvim/site/pack/packer/start/nvim-lint",
-    url = "https://github.com/mfussenegger/nvim-lint"
   },
   ["nvim-lspconfig"] = {
     loaded = true,

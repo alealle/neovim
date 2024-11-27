@@ -625,7 +625,7 @@ set tags=/Users/alessandroalle/Computing/tags,./tags,./../tags
 " -> Create/ update tag files
 augroup Tagging
     autocmd! BufWritePost
-    au BufWritePost *.c,*.cpp,*.cs,*.h,*.py,*.sh,*.zsh,*.java,*.js,*.sql silent! !ctags -R &
+    au BufWritePost *.c,*.cpp,*.cs,*.h,*.py,*.sh,*.zsh,*.java,*.js,*.sql,*.rs,*.ts,*.go silent! !ctags -R &
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -772,7 +772,7 @@ set spell
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 " => Open key mapping file
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''"{{{
-tabnew
-edit ~/.config/nvim/nvim_mappings.txt
-tabp
+"tabnew
+"edit ~/.config/nvim/nvim_mappings.txt
+"tabp
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""''}}}
