@@ -26,8 +26,15 @@ end
 --end
 
 -- :>mason
-mason.setup({})
-
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
+})
 -- :> LSP-config
 -- -> Language servers
 -- This is the default in Nvim 0.7+
@@ -111,25 +118,25 @@ local DEFAULT_SETTINGS = {
     -- This setting has no relation with the `automatic_installation` setting.
     ---@type string[]
     ensure_installed = {
-        --        "rust_analyzer",
-        --        "arduino_language_server",
-        --        "bashls",
-        --        "clangd",
-        --        "cmake",
-        --        "gopls",
-        --        -- "eslint",
-        --        "jdtls",
-        --        -- "quick_lint_js",
-        --        --"prettier",
-        --        "pyright",
+        "rust_analyzer",
+        "arduino_language_server",
+        "bashls",
+        "clangd",
+        "cmake",
+        "gopls",
+        -- "eslint",
+        "jdtls",
+        -- "quick_lint_js",
+        --"prettier",
+        "pyright",
         -- using mason to setup lua_ls because otherwise (via lspconfi)
         "lua_ls",
-        --        "sqlls",
-        --        "terraformls",
-        --        "tflint",
-        --        "tailwindcss",
-        --        "ts_ls",
-        --        "vimls",
+        "sqlls",
+        "terraformls",
+        "tflint",
+        "tailwindcss",
+        "ts_ls",
+        "vimls",
     },
 
     -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
@@ -148,8 +155,21 @@ mason_lspconfig.setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
+    -- Defaults
     function(server_name) -- default handler (optional)
-        mylspconfig[server_name].setup({})
+        mylspconfig[server_name].setup({
+            tonga = { "milonga" },
+            on_attach = on_attach,
+            flags = lsp_flags,
+            settings = {
+                diagnostics = {
+                    -- Get the language server to recognize the `vim` global
+                    globals = { "vim" },
+                },
+
+            },
+            capabilities = capabilities,
+        })
     end,
     -- Next, you can provide a dedicated handler for specific servers.
     -- For example, a handler override for the `rust_analyzer`:
@@ -159,9 +179,121 @@ mason_lspconfig.setup_handlers({
     -- If you use this approach, make sure you don't also manually set up servers
     --     directly via `lspconfig` as this will cause servers to be set up more than
     --     once.
+
+    -- Python
+    ["pyright"] = function()
+        mylspconfig.pyright.setup({
+            tong1 = { "milongs" },
+            on_attach = on_attach,
+            flags = lsp_flags,
+            capabilities = capabilities,
+            settings = {
+                python = {
+                    analysis = {
+                        autoSearchPaths = true,
+                        useLibraryCodeForTypes = true,
+                    },
+                },
+            },
+        })
+    end,
+
+    -- C
+    ["clangd"] = function()
+        mylspconfig.clangd.setup({
+            on_attach = on_attach,
+            flags = lsp_flags,
+            capabilities = capabilities,
+            cmd = {
+                "clangd",
+                --    "--offset-encoding=utf-16",
+            },
+        })
+    end,
+    ["bashls"] = function()
+        mylspconfig.bashls.setup({
+            on_attach = on_attach,
+            flags = lsp_flags,
+            capabilities = capabilities,
+            GLOB_PATTERN = "*@(.sh|.inc|.bash|.command|.zsh|.zshrc)",
+        })
+    end,
+    ["ts_ls"] = function()
+        mylspconfig.ts_ls.setup({
+            on_attach = on_attach,
+            flags = lsp_flags,
+            capabilities = capabilities,
+            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
+        })
+    end,
+    -- HTML, CSS, Javascript and other languages focused on web development
+    ["tailwindcss"] = function()
+        mylspconfig.tailwindcss.setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            filetypes = {
+                "aspnetcorerazor",
+                "astro",
+                "astro-markdown",
+                "blade",
+                "django-html",
+                "htmldjango",
+                "edge",
+                "eelixir",
+                "elixir",
+                "ejs",
+                "erb",
+                "eruby",
+                "gohtml",
+                "haml",
+                "handlebars",
+                "hbs",
+                "html",
+                "html-eex",
+                "heex",
+                "jade",
+                "leaf",
+                "liquid",
+                "markdown",
+                "mdx",
+                "mustache",
+                "njk",
+                "nunjucks",
+                "php",
+                "razor",
+                "slim",
+                "twig",
+                "css",
+                "less",
+                "postcss",
+                "sass",
+                "scss",
+                "stylus",
+                "sugarss",
+                --	"javascript",
+                -- "javascriptreact",
+                "reason",
+                "rescript",
+                -- "vue",
+                "svelte",
+            },
+            init_options = {
+                userLanguages = {
+                    eelixir = "html-eex",
+                    eruby = "erb",
+                    html = "html",
+                    css = "css",
+                },
+            },
+            settings = { documentFormatting = true },
+        })
+    end,
+
 })
 
 
+
+--[[transfering setup to mason
 mylspconfig.clangd.setup({
     on_attach = on_attach,
     flags = lsp_flags,
@@ -171,7 +303,6 @@ mylspconfig.clangd.setup({
     },
 })
 mylspconfig.cmake.setup({})
-
 -- Python:
 mylspconfig.pyright.setup({
     on_attach = on_attach,
@@ -198,38 +329,9 @@ mylspconfig.bashls.setup({
     on_attach = on_attach,
     flags = lsp_flags,
 })
-
+--]]
 -- Lua
-mylspconfig.lua_ls.setup({
-    on_attach = on_attach,
-    flags = lsp_flags,
-    settings = {
-        Lua = {
-            completion = {
-                callSnippet = "Replace",
-            },
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = "LuaJIT",
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { "vim", },
-            },
-
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
-            },
-            -- Do not send telemetry data containing a randomized but unique identifier
-            telemetry = {
-                enable = false,
-            },
-        },
-    },
-    capabilities = capabilities,
-})
-
+--[[
 -- Rust commented to not cause conflicts with rust-tools config
 -- mylspconfig.rust_analyzer.setup({
 -- on_attach = function(client, bufnr)
@@ -359,4 +461,37 @@ require 'lspconfig'.gopls.setup {
         },
     },
 }
+]] --
+
+-- Lua
+mylspconfig.lua_ls.setup({
+    on_attach = on_attach,
+    flags = lsp_flags,
+    settings = {
+        Lua = {
+            completion = {
+                callSnippet = "Replace",
+            },
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = "LuaJIT",
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = { "vim", },
+            },
+
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
+    },
+    capabilities = capabilities,
+})
+
 vim.api.nvim_command([[echom "All LSP plugins setup"]])
