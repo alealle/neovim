@@ -23,20 +23,11 @@ api.nvim_create_autocmd("BufWritePre", {
     end,
     group = FormatGroupId,
 })
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    pattern = { "*.py" },
-    desc = "Auto-format Python files before saving",
-    callback = function()
-        local fileName = vim.api.nvim_buf_get_name(0)
-        vim.cmd(":silent !black --preview -q " .. fileName)
-        vim.cmd(":silent !isort --profile black --float-to-top -q " .. fileName)
-        vim.cmd(":silent !docformatter --in-place --black " .. fileName)
-        vim.schedule(function()
-            vim.lsp.buf.format()
-            print("File formatted")
-        end)
-    end,
-    group = FormatGroupId,
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.py",
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
+  end,
 })
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = { "*.tf" },

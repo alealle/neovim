@@ -14,7 +14,6 @@ if not status3 then
     return
 end
 
-
 --local status4, mason_null_ls = pcall(require, "mason-null-ls")
 --if not status4 then
 --	return
@@ -288,10 +287,45 @@ mason_lspconfig.setup_handlers({
             settings = { documentFormatting = true },
         })
     end,
+    -- Golang
+    ['gopls'] = function()
+        require 'lspconfig'.gopls.setup {
+            on_attach = on_attach,
+            cmd = { "gopls" },
+            filetypes = { "go", "gomod", "gowork", "gotmpl" },
+            root_dir = mylspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+            settings = {
+                gopls = {
+                    completeUnimported = true,
+                    usePlaceholders = true,
+                    analyses = {
+                        unusedparams = true,
+                    },
+                },
+            },
+        }
+    end,
 
+    -- Terraform
+    ['terraformls'] = function()
+        mylspconfig.terraformls.setup({
+            root_dir = mylspconfig.util.root_pattern('.terraform', '.git', '.'),
+        })
+    end,
+
+    ['tflint'] = function()
+        mylspconfig.tflint.setup({
+            root_dir = mylspconfig.util.root_pattern('.terraform', '.git', '.'),
+        })
+    end,
+
+    -- Scala
+    -- ['metals'] = function()
+    --     mylspconfig.metals.setup {
+    --         root_dir = mylspconfig.util.root_pattern("build.sbt", "build.sc", "build.gradle", "pom.xml", '.'),
+    --     }
+    -- end,
 })
-
-
 
 --[[transfering setup to mason
 mylspconfig.clangd.setup({
@@ -437,10 +471,7 @@ mylspconfig.tflint.setup({
     root_dir = mylspconfig.util.root_pattern('.terraform', '.git', '.'),
 })
 
--- Scala
-mylspconfig.metals.setup {
-    root_dir = mylspconfig.util.root_pattern("build.sbt", "build.sc", "build.gradle", "pom.xml", '.'),
-}
+
 -- SQL
 mylspconfig.sqlls.setup({})
 
@@ -467,6 +498,7 @@ require 'lspconfig'.gopls.setup {
 mylspconfig.lua_ls.setup({
     on_attach = on_attach,
     flags = lsp_flags,
+    cmd = { '/usr/local/bin/lua-language-server' },
     settings = {
         Lua = {
             completion = {
@@ -494,4 +526,14 @@ mylspconfig.lua_ls.setup({
     capabilities = capabilities,
 })
 
+-- Scala
+mylspconfig.metals.setup {
+    root_dir = mylspconfig.util.root_pattern("build.sbt", "build.sc", "build.gradle", "pom.xml", '.'),
+}
+-- Zig
+mylspconfig.zls.setup {
+    cmd = { '/usr/local/bin/zls' }
+}
+
+-- Ending
 vim.api.nvim_command([[echom "All LSP plugins setup"]])

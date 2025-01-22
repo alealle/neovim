@@ -76,4 +76,5 @@ return require("packer").startup(function(use)
     -- rust vim
     use({ "rust-lang/rust.vim" })
     use({ "stevearc/conform.nvim" })
+    use("mfussenegger/nvim-jdtls")
 end)
